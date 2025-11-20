@@ -13,11 +13,11 @@
   --bg:#0f1114;
   --card:#17181b;
   --muted:#9aa3b2;
-  --text:#e6eef8;
+  --text:#05010a;
   --accent:#0b2e99;
 }
 *{box-sizing:border-box}
-body{margin:0;padding:18px;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto;background:linear-gradient(180deg,#0b0c0e 0%,#0f1114 100%);color:var(--text)}
+body{margin:0;padding:16px;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto;background:linear-gradient(180deg,#0b0c0e 0%,#0f1114 100%);color:var(--text)}
 h1{margin:0 0 14px;text-align:center;color:var(--blue);font-size:20px}
 .container{display:flex;gap:12px;flex-wrap:wrap}
 .left,.right{background:var(--card);border-radius:12px;padding:12px;box-shadow:0 6px 18px rgba(3,6,12,0.6)}
