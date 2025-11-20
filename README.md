@@ -1,317 +1,426 @@
 
 <html lang="id">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Tabungan Emas — Light Mode</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Tabungan Emas Pegadaian— Gold Mode</title>
 <style>
 :root{
   --blue:#0b61ff;
-  --gold:#d4a017;
-  --green:#0a8a4b;
+  --gold:#e0b300;
+  --green:#12a150;
   --red:#d63b3b;
-  --bg:#fafafa;
-  --card:#ffffff;
-  --muted:#777;
-  --border:#e5e5e5;
-  --tableHeader:#f1f1f1;
-  --buy:#e9f7ef;
-  --sell:#fdecea;
-  --admin:#f7f7f7;
+  --bg:#0f1114;
+  --card:#17181b;
+  --muted:#9aa3b2;
+  --text:#e1f507;
+  --accent:#0b2e99;
 }
-body{margin:0;padding:0;font-family:Arial, sans-serif;background:var(--bg);color:#222;}
-h1,h2,h3{color:#333;}
-.container{display:flex;gap:16px;padding:16px;}
-.left,.right{background:var(--card);padding:16px;border-radius:12px;border:1px solid var(--border);color:#222;}
-.card{background:var(--card);padding:16px;border-radius:12px;border:1px solid var(--border);}
-input,select{background:#fff;color:#222;border:1px solid var(--border);padding:6px 8px;border-radius:6px;}
-button{padding:8px 14px;border-radius:8px;border:none;cursor:pointer;}
-.btn{background:var(--blue);color:#fff;}
-.btn.red{background:var(--red);} .btn.green{background:var(--green);} .btn.ghost{background:#fff;color:#333;border:1px solid var(--border);} 
-table{width:100%;border-collapse:collapse;background:var(--card);color:#222;}
-th{background:var(--tableHeader);border-bottom:2px solid var(--border);padding:10px;}
-td{padding:8px;border-bottom:1px solid var(--border);}
-.buy-row{background:#e9f7ef!important;} .sell-row{background:#fdecea!important;} .admin-row{background:#f7f7f7!important;} 
-.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
-.total-bar{display:flex;align-items:center;gap:8px;}
-.muted{color:var(--muted);} 
-#loginOverlay,#registerOverlay{position:fixed;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.92);backdrop-filter:blur(5px);z-index:999;} 
-.loginBox{background:#fff;padding:24px;border-radius:12px;min-width:260px;border:1px solid var(--border);box-shadow:0 0 12px rgba(0,0,0,0.05);} 
+*{box-sizing:border-box}
+body{margin:0;padding:18px;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto;background:linear-gradient(180deg,#0b0c0e 0%,#0f1114 100%);color:var(--text)}
+h1{margin:0 0 14px;text-align:center;color:var(--blue);font-size:20px}
+.container{display:flex;gap:12px;flex-wrap:wrap}
+.left,.right{background:var(--card);border-radius:12px;padding:12px;box-shadow:0 6px 18px rgba(3,6,12,0.6)}
+.left{flex:1;min-width:260px;max-width:340px}
+.right{flex:2;min-width:320px}
+h2{margin:0 0 8px;font-size:15px;color:var(--blue)}
+label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+input[type="number"], input[type="date"], input[type="text"], input[type="password"]{width:100%;padding:8px 10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:#0d0e10;color:var(--text);font-size:13px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.row>div{flex:1;min-width:100px}
+.btn{display:inline-block;padding:7px 10px;border-radius:8px;border:none;cursor:pointer;font-size:13px}
+.btn.primary{background:var(--blue);color:#fff}
+.btn.gold{background:var(--gold);color:#000;font-weight:600}
+.btn.ghost{background:transparent;border:1px solid var(--blue);color:var(--blue)}
+.btn.small{padding:5px 8px;font-size:12px;border-radius:7px}
+.total{font-size:13px;color:var(--text);margin-top:8px}
+.muted{color:var(--muted);font-size:12px}
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px}
+th,td{padding:8px 6px;border-bottom:1px solid rgba(255,255,255,0.03);text-align:left}
+th{background:var(--accent);color:#fff;font-weight:600;font-size:13px}
+tr:hover td{background:rgba(255,255,255,0.02)}
+tfoot td{font-weight:700;background:rgba(0,0,0,0.15);color:var(--gold)}
+.profit-pos{color:var(--green);font-weight:700}
+.profit-neg{color:var(--red);font-weight:700}
+.inline-edit{padding:6px;border-radius:6px;background:#0c0c0d;border:1px solid #222;color:var(--text)}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.total-bar{display:flex;gap:12px;align-items:center}
+#totalDisplay{color:var(--muted)}
+@media(max-width:860px){.container{flex-direction:column}}
+/* Login/Register Overlay */
+#loginOverlay,#registerOverlay{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  background:rgba(15,15,20,0.95);display:flex;justify-content:center;align-items:center;z-index:9999;
+}
 </style>
 </head>
 <body>
+
+<!-- LOGIN OVERLAY -->
 <div id="loginOverlay">
-  <div class="loginBox">
-    <h2>Login</h2>
-    <input id="loginUser" placeholder="Username"><br><br>
+  <div style="background:var(--card);padding:20px;border-radius:12px;width:280px;text-align:center">
+    <h2 style="margin-bottom:12px;color:var(--blue)">🔒 Login</h2>
+    <input id="loginUser" type="text" placeholder="Username"><br><br>
     <input id="loginPass" type="password" placeholder="Password"><br><br>
-    <button class="btn" id="loginBtn">Login</button>
-    <p class="muted">Belum punya akun? <a href="#" id="showRegister">Daftar</a></p>
+    <button id="loginBtn" class="btn primary" style="width:100%">Login</button>
+    <p style="margin-top:8px;color:var(--muted);font-size:12px">Belum punya akun? <span id="showRegister" style="color:var(--gold);cursor:pointer">Daftar</span></p>
   </div>
 </div>
 
-<div id="registerOverlay" style="display:none;">
-  <div class="loginBox">
-    <h2>Register</h2>
-    <input id="regUser" placeholder="Username"><br><br>
+<!-- REGISTER OVERLAY -->
+<div id="registerOverlay" style="display:none">
+  <div style="background:var(--card);padding:20px;border-radius:12px;width:280px;text-align:center">
+    <h2 style="margin-bottom:12px;color:var(--blue)">📝 Daftar</h2>
+    <input id="regUser" type="text" placeholder="Username"><br><br>
     <input id="regPass" type="password" placeholder="Password"><br><br>
-    <button class="btn green" id="registerBtn">Daftar</button>
-    <p class="muted">Sudah punya akun? <a href="#" id="showLogin">Login</a></p>
+    <button id="registerBtn" class="btn gold" style="width:100%">Daftar</button>
+    <p style="margin-top:8px;color:var(--muted);font-size:12px">Sudah punya akun? <span id="showLogin" style="color:var(--blue);cursor:pointer">Login</span></p>
   </div>
 </div>
 
-<h1 style="padding-left:16px;">💰 Tabungan Emas — Light Mode</h1>
-<div class="container">
-<div class="left" style="flex:1;">
-  <h3>Input Pembelian</h3>
-  <form id="assetForm">
-    <input id="grams" type="number" step="0.00001" placeholder="Gram"><br><br>
-    <input id="priceBuy" type="number" placeholder="Harga Beli/gr"><br><br>
-    <input id="date" type="date"><br><br>
-    <button class="btn green" type="submit">Tambah</button>
-  </form>
-  <hr>
-  <h3>Input Penjualan</h3>
-  <form id="sellForm">
-    <input id="sellGram" type="number" step="0.00001" placeholder="Gram Jual"><br><br>
-    <input id="sellPrice" type="number" placeholder="Harga Jual/gr"><br><br>
-    <input id="sellDate" type="date"><br><br>
-    <button class="btn red" type="submit">Jual</button>
-  </form>
-  <hr>
-  <h3>Potongan Admin (Mengurangi Gram)</h3>
-  <form id="adminForm">
-    <input id="adminGram" type="number" step="0.00001" placeholder="Gram Dipotong"><br><br>
-    <input id="adminDate" type="date"><br><br>
-    <button class="btn" type="submit">Input Potongan</button>
-  </form>
-  <hr>
-  <h3>Harga Pasar</h3>
-  <input id="currentPrice" type="number" placeholder="Harga Pasar/gr"><br><br>
-  <button class="btn" id="zakatBtn">Hitung Zakat</button>
-  <br><br>
-  <button class="btn ghost" id="backupJSON">Backup JSON</button>
-  <button class="btn ghost" id="restoreJSON">Restore JSON</button>
-  <input type="file" id="restoreFile" style="display:none;">
-</div>
+<h1>💰 Tabungan Emas Pegadaian— Gold Mode</h1>
 
-<div class="right" style="flex:2;">
-  <div class="topbar">
-    <h2>Daftar Aset</h2>
-    <div class="total-bar">
-      <div id="totalDisplay" class="muted">0 g • Rp0</div>
-      <button id="logoutBtn" class="btn ghost">🚪 Logout</button>
+<div class="container">
+  <div class="left">
+    <!-- Harga Sekarang -->
+    <div class="card">
+      <h2>Harga Sekarang / gr (opsional)</h2>
+      <input id="currentPrice" type="number" placeholder="Contoh: 999000" step="0.00001" />
+    </div>
+    <!-- Tambah Aset -->
+    <div class="card" style="margin-top:12px">
+      <h2>Tambah Aset</h2>
+      <form id="assetForm">
+        <div class="row">
+          <div><label>Gram</label><input id="grams" type="number" step="0.00001" required></div>
+          <div><label>Harga Beli/gr</label><input id="priceBuy" type="number" step="0.00001" required></div>
+          <div><label>Tanggal</label><input id="date" type="date" required></div>
+        </div>
+        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn primary" type="submit">💾 Simpan</button>
+          <button id="clearAll" class="btn ghost small" type="button">🗑 Hapus Semua</button>
+          <button id="zakatBtn" class="btn gold small" type="button">📿 Hitung Zakat</button>
+        </div>
+        <div class="total" id="leftGramTotal"></div>
+        <div class="total" id="leftProfitTotal"></div>
+        <div class="muted" id="leftTotalAsset"></div>
+      </form>
+    </div>
+    <!-- Admin Manual -->
+    <div class="card" style="margin-top:12px">
+      <h2>Potong Admin Manual</h2>
+      <form id="adminForm">
+        <div class="row">
+          <div><label>Gram Admin</label><input id="adminGram" type="number" step="0.00001" required></div>
+          <div><label>Tanggal Admin</label><input id="adminDate" type="date" required></div>
+        </div>
+        <div style="margin-top:10px">
+          <button class="btn gold small" type="submit">🛠 Terapkan Admin</button>
+        </div>
+      </form>
+    </div>
+    <!-- Jual Aset -->
+    <div class="card" style="margin-top:12px">
+      <h2>Jual Aset</h2>
+      <form id="sellForm">
+        <div class="row">
+          <div><label>Gram</label><input id="sellGram" type="number" step="0.00001" required></div>
+          <div><label>Harga Jual/gr</label><input id="sellPrice" type="number" step="0.00001" required></div>
+          <div><label>Tanggal Jual</label><input id="sellDate" type="date" required></div>
+        </div>
+        <div style="margin-top:10px">
+          <button class="btn gold" type="submit">💸 Jual</button>
+        </div>
+      </form>
     </div>
   </div>
-  <div class="card">
-    <button id="showAll" class="btn ghost">Tampilkan Semua</button>
-    <button id="showOld" class="btn ghost">Tampilkan ≥ 1 Tahun</button>
-    <button id="clearAll" class="btn red" style="float:right;">Hapus Semua</button>
-    <br><br>
-    <table>
-      <thead>
-        <tr>
-          <th>Tipe</th><th>Gram</th><th>Harga</th><th>Tanggal</th><th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody id="assetBody"></tbody>
-      <tfoot>
-        <tr>
-          <td>Total</td>
-          <td id="footGram">0</td>
-          <td id="footBuy">0</td>
-          <td id="footNow">0</td>
-          <td id="footProfit">0</td>
-        </tr>
-      </tfoot>
-    </table>
-    <br>
-    <div id="profitTotal"></div>
-    <div id="valueTotal"></div>
+
+  <div class="right">
+    <div class="card">
+      <div class="topbar">
+        <h2 style="margin:0">Daftar Aset</h2>
+        <div class="total-bar">
+          <div id="totalDisplay" class="muted">0 g • Rp0</div>
+          <button id="logoutBtn" class="btn small ghost" style="margin-left:8px">🚪 Logout</button>
+        </div>
+      </div>
+
+      <div style="margin:8px 0" class="controls">
+        <button id="showAll" class="btn small ghost">🌍 Semua</button>
+        <button id="showOld" class="btn small ghost">⏳ ≥ 1 Tahun</button>
+        <button id="backupJSON" class="btn small gold">📦 Backup JSON</button>
+        <input type="file" id="restoreFile" accept=".json" style="display:none">
+        <button id="restoreJSON" class="btn small ghost">♻️ Restore</button>
+      </div>
+
+      <table id="table">
+        <thead>
+          <tr><th>No</th><th>Gram</th><th>Tanggal</th><th>Harga Beli/Jual</th><th>Nilai Beli</th><th>Nilai Sekarang</th><th>Laba</th><th>Aksi</th></tr>
+        </thead>
+        <tbody></tbody>
+        <tfoot>
+          <tr>
+            <td><b>Total</b></td>
+            <td id="footGram">0</td>
+            <td colspan="2"></td>
+            <td id="footBuy">Rp0</td>
+            <td id="footNow">Rp0</td>
+            <td id="footProfit">Rp0</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <div class="total" id="profitTotal" style="margin-top:10px"></div>
+      <div class="total muted" id="valueTotal"></div>
+    </div>
   </div>
 </div>
-</div>
+
+<div style="text-align:center;margin-top:12px;color:var(--muted)">Data tersimpan otomatis di browser (<b>goldAssets_v14</b>)</div>
 
 <script>
-const USER_KEY="goldUser_v1";
-const LS_KEY="goldAssets_v1";
-let assets=[];
-let filterMode="all";
-function $(id){return document.getElementById(id);} 
-function hash(s){return btoa(s);} 
-function formatRp(n){return "Rp"+Number(n).toLocaleString("id-ID");}
+// ===== LOGIN & REGISTER =====
+const USER_KEY = "goldAssetsUser_v1"; 
+const LS_KEY = "goldAssets_v14";
 
-// LOGIN SYSTEM
+function hash(s){ return btoa(s); }
+
 function checkLogin(){
-  const u=sessionStorage.getItem("loggedIn");
-  if(!u){$("loginOverlay").style.display="flex";$("registerOverlay").style.display="none";}
-  else{$("loginOverlay").style.display="none";$("registerOverlay").style.display="none";}
+  const loggedIn = sessionStorage.getItem("loggedIn");
+  if(!loggedIn){
+    document.getElementById("loginOverlay").style.display = "flex";
+    document.getElementById("registerOverlay").style.display = "none";
+    document.querySelector(".container").style.display = "none";
+    return false;
+  } else {
+    document.getElementById("loginOverlay").style.display = "none";
+    document.getElementById("registerOverlay").style.display = "none";
+    document.querySelector(".container").style.display = "flex";
+    return true;
+  }
 }
-$("showRegister").onclick=()=>{$("loginOverlay").style.display="none";$("registerOverlay").style.display="flex";};
-$("showLogin").onclick=()=>{$("registerOverlay").style.display="none";$("loginOverlay").style.display="flex";};
 
-$("registerBtn").onclick=()=>{
-  const u=$("regUser").value.trim();
-  const p=$("regPass").value.trim();
-  if(!u||!p)return alert("Isi semua data");
-  localStorage.setItem(USER_KEY,JSON.stringify({user:u,pass:hash(p)}));
-  alert("Registrasi berhasil");
-  $("registerOverlay").style.display="none";$("loginOverlay").style.display="flex";
+// Toggle login/register
+document.getElementById("showRegister").onclick = ()=>{ 
+  document.getElementById("loginOverlay").style.display="none";
+  document.getElementById("registerOverlay").style.display="flex";
+};
+document.getElementById("showLogin").onclick = ()=>{ 
+  document.getElementById("loginOverlay").style.display="flex";
+  document.getElementById("registerOverlay").style.display="none";
 };
 
-$("loginBtn").onclick=()=>{
-  const u=$("loginUser").value.trim();
-  const p=$("loginPass").value.trim();
-  const data=JSON.parse(localStorage.getItem(USER_KEY)||"{}");
-  if(!data.user)return alert("Belum ada akun. Register dulu.");
-  if(u===data.user && hash(p)===data.pass){sessionStorage.setItem("loggedIn",u);checkLogin();}
-  else alert("Login salah");
+// Register
+document.getElementById("registerBtn").onclick = ()=>{
+  const u = document.getElementById("regUser").value.trim();
+  const p = document.getElementById("regPass").value;
+  if(!u || !p) return alert("Lengkapi username & password");
+  const userData = { username: u, password: hash(p) };
+  localStorage.setItem(USER_KEY, JSON.stringify(userData));
+  alert("Akun berhasil dibuat, silakan login!");
+  document.getElementById("registerOverlay").style.display="none";
+  document.getElementById("loginOverlay").style.display="flex";
 };
 
-$("logoutBtn").onclick=()=>{sessionStorage.removeItem("loggedIn");location.reload();};
+// Login
+document.getElementById("loginBtn").onclick = ()=>{
+  const u = document.getElementById("loginUser").value.trim();
+  const p = document.getElementById("loginPass").value;
+  const stored = JSON.parse(localStorage.getItem(USER_KEY) || "{}");
+  if(u === stored.username && hash(p) === stored.password){
+    sessionStorage.setItem("loggedIn", "1");
+    checkLogin();
+  } else {
+    alert("Username atau password salah!");
+  }
+};
 
-// LOAD & SAVE
-function save(){localStorage.setItem(LS_KEY,JSON.stringify(assets));}
-function load(){assets=JSON.parse(localStorage.getItem(LS_KEY)||"[]");}
+// Logout
+document.getElementById("logoutBtn").onclick = function(){
+  sessionStorage.removeItem("loggedIn");
+  location.reload();
+};
 
-load();
+// ===== SCRIPT TABUNGAN EMAS =====
+let assets = JSON.parse(localStorage.getItem(LS_KEY) || "[]");
+let filterMode = "all";
+const $ = id => document.getElementById(id);
+const tbody = document.querySelector("#table tbody");
 
-function getSaldoEmas(){return assets.reduce((a,b)=>a+b.grams,0);} 
+function save(){ localStorage.setItem(LS_KEY, JSON.stringify(assets)); }
+function formatRp(n){ return "Rp"+Math.round(n||0).toString().replace(/\B(?=(\d{3})+(?!\d))/g,"."); }
+function isOld(d){ return (new Date() - new Date(d)) >= 365*24*60*60*1000; }
+function getSaldoEmas(){ return assets.reduce((s,a)=>s + (Number(a.grams)||0), 0); }
 
 function renderLeftTotals(){
-  const totalNow=getSaldoEmas()*Number($("currentPrice").value||0);
-  const totalBuy=assets.reduce((a,b)=>a+(b.grams>0?b.grams*b.priceBuy:0),0);
-  const profit=totalNow-totalBuy;
-  $("profitTotal").textContent="Laba/Rugi: "+formatRp(profit);
-  $("valueTotal").textContent="Nilai Total: "+formatRp(totalNow);
+  const currentPrice = +$("currentPrice").value || 0;
+  const totalGram = getSaldoEmas();
+  const totalBuy = assets.reduce((s,a)=>s + (Number(a.grams)||0) * (Number(a.priceBuy)||0), 0);
+  const totalValue = totalGram * currentPrice;
+  const totalProfit = totalValue - totalBuy;
+
+  $("leftGramTotal").textContent = "Saldo Emas: " + totalGram.toFixed(5) + " g";
+  if(currentPrice > 0){
+    $("leftProfitTotal").innerHTML = (totalProfit >= 0 ? `<span class="profit-pos">Laba: ${formatRp(totalProfit)}</span>` : `<span class="profit-neg">Rugi: ${formatRp(totalProfit)}</span>`);
+    $("leftTotalAsset").textContent = "💰 Total Aset (harga sekarang): " + formatRp(totalValue);
+  } else {
+    $("leftProfitTotal").textContent = "";
+    $("leftTotalAsset").textContent = "";
+  }
 }
 
 function render(){
-  const tbody=$("assetBody");
-  tbody.innerHTML="";
-  const now=new Date();
-  let list=assets;
-  if(filterMode==="old"){
-    list=assets.filter(a=>{
-      const d=new Date(a.date);
-      const diff=(now-d)/1000/60/60/24/365;
-      return diff>=1;
-    });
-  }
+  tbody.innerHTML = "";
+  const currentPrice = +$("currentPrice").value || 0;
+  let totalBuy = 0, totalNow = 0, totalProfit = 0;
 
-  let totalBuy=0;
-  let totalNow=0;
-  let totalProfit=0;
-  const cp=Number($("currentPrice").value||0);
+  let filtered = (filterMode === "old") ? assets.filter(a=>isOld(a.date)) : assets.slice();
+  filtered.sort((a,b)=> new Date(a.date) - new Date(b.date));
 
-  list.forEach(a=>{
-    const tr=document.createElement("tr");
-    if(a.type==="buy") tr.className="buy-row";
-    if(a.type==="sell") tr.className="sell-row";
-    if(a.type==="admin") tr.className="admin-row";
+  filtered.forEach((a,i)=>{
+    const isSell = a.grams < 0;
+    const absGram = Math.abs(Number(a.grams || 0));
+    const price = Number(a.priceBuy || 0);
+    const beli = absGram * price;
+    let nowValue = 0;
+	if(a.type !== "admin"){
+	nowValue = absGram * (currentPrice > 0 ? currentPrice : price);
+	}
+    const now = isSell ? -nowValue : nowValue;
+    let laba = isSell ? -beli : nowValue - beli;
 
-    if(a.grams>0) totalBuy+=a.grams*a.priceBuy;
-    totalNow+=a.grams*cp;
+    totalBuy += isSell ? -beli : beli;
+    totalNow += now;
+    totalProfit += laba;
 
-    tr.innerHTML=`
-      <td>${a.type}</td>
-      <td>${a.grams}</td>
-      <td>${formatRp(a.priceBuy)}</td>
-      <td>${a.date}</td>
-      <td>
-        <button class="btn ghost editBtn">✏</button>
-        <button class="btn red" onclick="delAsset('${a.id}')">🗑</button>
-      </td>`;
+    const tr = document.createElement("tr");
+    tr.dataset.id = a.id;
 
+    if(a.type==="admin") tr.style.color="var(--red)";
+    else if(isSell) tr.style.color='var(--red)';
+    else if(laba>0) tr.style.color='var(--green)';
+    else tr.style.color='var(--text)';
+
+    const m=["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
+    const d = new Date(a.date || Date.now());
+    const ds = `${d.getDate()} ${m[d.getMonth()]} ${d.getFullYear()}`;
+
+    const label = a.type==="admin" ? "Admin" : (isSell ? "Jual" : "Beli");
+
+    tr.innerHTML = `
+      <td>${i+1}</td>
+      <td class="grams">${Number(a.grams).toFixed(5)}</td>
+      <td class="date">${ds}</td>
+      <td class="priceBuy">${formatRp(price)}</td>
+      <td>${formatRp(isSell ? -beli : beli)}</td>
+      <td>${now < 0 ? '-' + formatRp(Math.abs(now)) : formatRp(now)}</td>
+      <td>${laba < 0 ? '-' + formatRp(Math.abs(laba)) : formatRp(laba)}</td>
+      <td>${label} 
+        <button class="btn small ghost editBtn">✏️</button>
+        <button class="btn small ghost" onclick="delAsset('${a.id}')">🗑</button>
+      </td>
+    `;
     tbody.appendChild(tr);
 
-    tr.querySelector('.editBtn').onclick=()=>{
-      const g=prompt("Gram:",a.grams);
-      const p=prompt("Harga Beli/gr:",a.priceBuy);
-      if(g&&p){a.grams=parseFloat(g);a.priceBuy=parseFloat(p);save();render();renderLeftTotals();}
+    // Edit
+    tr.querySelector(".editBtn").onclick = ()=>{
+      const grams = prompt("Gram:", a.grams);
+      const priceB = prompt("Harga Beli/gr:", a.priceBuy);
+      if(grams && priceB){
+        a.grams = parseFloat(grams);
+        a.priceBuy = parseFloat(priceB);
+        save();
+        render();
+        renderLeftTotals();
+      }
     };
   });
 
-  totalProfit=totalNow-totalBuy;
+  $("footGram").textContent = getSaldoEmas().toFixed(5);
+  $("footBuy").textContent = formatRp(totalBuy);
+  $("footNow").textContent = formatRp(totalNow);
+  $("footProfit").textContent = formatRp(totalProfit);
 
-  $("footGram").textContent=getSaldoEmas().toFixed(5);
-  $("footBuy").textContent=formatRp(totalBuy);
-  $("footNow").textContent=formatRp(totalNow);
-  $("footProfit").textContent=formatRp(totalProfit);
-
-  $("totalDisplay").textContent=`${getSaldoEmas().toFixed(5)} g • ${formatRp(totalNow)}`;
+  $("totalDisplay").textContent = `${getSaldoEmas().toFixed(5)} g • ${formatRp(totalNow)}`;
+  $("profitTotal").textContent = totalProfit >=0 ? "Laba Total: "+formatRp(totalProfit) : "Rugi Total: "+formatRp(totalProfit);
+  $("valueTotal").textContent = "Nilai Total: "+formatRp(totalNow);
   renderLeftTotals();
 }
 
-// FORMS
-$("assetForm").onsubmit=e=>{
+// Forms
+$("assetForm").onsubmit = function(e){
   e.preventDefault();
-  const g=parseFloat($("grams").value);
-  const p=parseFloat($("priceBuy").value);
-  const d=$("date").value;
-  if(isNaN(g)||isNaN(p)||!d)return alert("Lengkapi data");
-  assets.push({id:Date.now()+"",grams:g,priceBuy:p,date:d,type:"buy"});
-  save();render();e.target.reset();
+  const g = parseFloat($("grams").value);
+  const p = parseFloat($("priceBuy").value);
+  const d = $("date").value;
+  if(isNaN(g)||isNaN(p)||!d) return alert("Lengkapi data");
+  assets.push({ id: Date.now().toString(), grams:g, priceBuy:p, date:d, type:"buy" });
+  save(); render(); $("assetForm").reset();
 };
-
-$("sellForm").onsubmit=e=>{
+$("sellForm").onsubmit = function(e){
   e.preventDefault();
-  const g=parseFloat($("sellGram").value);
-  const p=parseFloat($("sellPrice").value);
-  const d=$("sellDate").value;
-  if(isNaN(g)||isNaN(p)||!d)return alert("Lengkapi data");
-  assets.push({id:Date.now()+"",grams:-g,priceBuy:p,date:d,type:"sell"});
-  save();render();e.target.reset();
+  const g = parseFloat($("sellGram").value);
+  const p = parseFloat($("sellPrice").value);
+  const d = $("sellDate").value;
+  if(isNaN(g)||isNaN(p)||!d) return alert("Lengkapi data");
+  assets.push({ id: Date.now().toString(), grams:-g, priceBuy:p, date:d, type:"sell" });
+  save(); render(); $("sellForm").reset();
 };
-
-$("adminForm").onsubmit=e=>{
+$("adminForm").onsubmit = function(e){
   e.preventDefault();
-  const g=parseFloat($("adminGram").value);
-  const d=$("adminDate").value;
-  if(isNaN(g)||!d)return alert("Lengkapi data");
-  assets.push({id:Date.now()+"",grams:-g,priceBuy:0,date:d,type:"admin"});
-  save();render();e.target.reset();
+  const g = parseFloat($("adminGram").value);
+  const d = $("adminDate").value;
+  if(isNaN(g)||!d) return alert("Lengkapi data");
+  assets.push({ id: Date.now().toString(), grams:-g, priceBuy:0, date:d, type:"admin" });
+  save(); render(); $("adminForm").reset();
 };
 
-$("clearAll").onclick=()=>{if(confirm("Hapus semua?")){assets=[];save();render();}};
-$("showAll").onclick=()=>{filterMode="all";render();};
-$("showOld").onclick=()=>{filterMode="old";render();};
-$("currentPrice").oninput=render;
+// Controls
+$("clearAll").onclick = ()=>{
+  if(confirm("Hapus semua aset?")){ assets=[]; save(); render(); }
+};
+$("showAll").onclick = ()=>{ filterMode="all"; render(); };
+$("showOld").onclick = ()=>{ filterMode="old"; render(); };
+$("currentPrice").oninput = render;
 
-// ZAKAT
-$("zakatBtn").onclick=()=>{
-  const totalGram=getSaldoEmas();
-  if(totalGram>=85) alert("Zakat Wajib: "+(totalGram*0.025).toFixed(5)+" g");
-  else alert("Belum wajib zakat (nishab 85g)");
+// Zakat
+$("zakatBtn").onclick = function(){
+  const totalGram = getSaldoEmas();
+  const nishab = 85; // gram
+  if(totalGram>=nishab){
+    const zakat = totalGram*0.025;
+    alert("Zakat Wajib: "+zakat.toFixed(5)+" g");
+  } else {
+    alert("Belum wajib zakat (nishab 85g)");
+  }
 };
 
-// BACKUP
-$("backupJSON").onclick=()=>{
-  const blob=new Blob([JSON.stringify(assets,null,2)],{type:"application/json"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="backup_gold.json";
-  a.click();
+// Backup / Restore
+$("backupJSON").onclick = ()=>{ 
+  const blob = new Blob([JSON.stringify(assets,null,2)],{type:"application/json"});
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download="goldAssetsBackup.json"; a.click();
 };
-
-$("restoreJSON").onclick=()=>{$("restoreFile").click();};
-$("restoreFile").onchange=e=>{
-  const file=e.target.files[0]; if(!file)return;
-  const reader=new FileReader();
-  reader.onload=()=>{try{assets=JSON.parse(reader.result);save();render();alert("Restore OK");}catch{alert("File rusak");}}
+$("restoreJSON").onclick = ()=>{$("restoreFile").click();};
+$("restoreFile").onchange = function(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ()=>{ 
+    try{ assets = JSON.parse(reader.result); save(); render(); alert("Restore berhasil"); } 
+    catch{ alert("File tidak valid"); }
+  };
   reader.readAsText(file);
 };
 
-function delAsset(id){
-  if(confirm("Hapus aset ini?")){
-    assets=assets.filter(a=>a.id!==id);
-    save();render();
-  }
+// Delete single asset
+function delAsset(id){ 
+  if(confirm("Hapus aset ini?")){ assets=assets.filter(a=>a.id!==id); save(); render(); }
 }
 
-checkLogin();
+checkLogin(); 
 render();
 </script>
 </body>
-
 </html>
