@@ -1,4 +1,3 @@
-saya ingin kolom sebelah kiri lebih lebar, maka bagian mana yang harus diganti agar semua kolom masuk tanpa perlu scroll horizontal
 <html lang="id">
 <head>
 <meta charset="utf-8" />
@@ -283,12 +282,6 @@ tfoot td{
 </div>
 
 <div style="text-align:center;margin-top:12px;color:var(--muted)">Data tersimpan otomatis di browser (<b>goldAssets_v14</b>)</div>
-/* Lebarkan kolom LABA (kolom ke-7) */
-#table th:nth-child(7),
-#table td:nth-child(7){
-  width: 150px;     /* bebas ubah jadi 160 / 170 kalau mau */
-  min-width: 150px;
-}
 <script>
 // ===== LOGIN & REGISTER =====
 const USER_KEY = "goldAssetsUser_v1"; 
