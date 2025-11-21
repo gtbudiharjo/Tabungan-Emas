@@ -46,7 +46,7 @@ h1{
 }
 
 .left{flex:1;min-width:230px;max-width:300px}
-.right{flex:4;min-width:600px}
+.right{flex:5;min-width:600px}
 
 h2{
   margin:0 0 6px;
