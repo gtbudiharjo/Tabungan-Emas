@@ -187,12 +187,12 @@ tfoot td{
   <div class="left">
     <!-- Harga Sekarang -->
     <div class="card">
-      <h2>Harga Sekarang / gr (opsional)</h2>
+      <h2>Harga Sekarang / gr</h2>
       <input id="currentPrice" type="number" placeholder="Contoh: 999000" step="0.00001" />
     </div>
     <!-- Tambah Aset -->
     <div class="card" style="margin-top:12px">
-      <h2>Tambah Aset</h2>
+      <h2>Tambah Emas</h2>
       <form id="assetForm">
         <div class="row">
           <div><label>Gram</label><input id="grams" type="number" step="0.00001" required></div>
@@ -211,7 +211,7 @@ tfoot td{
     </div>
     <!-- Admin Manual -->
     <div class="card" style="margin-top:12px">
-      <h2>Potong Admin Manual</h2>
+      <h2>Potong Admin </h2>
       <form id="adminForm">
         <div class="row">
           <div><label>Gram Admin</label><input id="adminGram" type="number" step="0.00001" required></div>
@@ -224,7 +224,7 @@ tfoot td{
     </div>
     <!-- Jual Aset -->
     <div class="card" style="margin-top:12px">
-      <h2>Jual Aset</h2>
+      <h2>Jual Emas</h2>
       <form id="sellForm">
         <div class="row">
           <div><label>Gram</label><input id="sellGram" type="number" step="0.00001" required></div>
