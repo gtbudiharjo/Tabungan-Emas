@@ -5,52 +5,156 @@
 <title>Tabungan Emas Pegadaian— Gold Mode</title>
 <style>
 :root{
-  --blue:#0b61ff;
-  --gold:#e0b300;
-  --green:#12a150;
-  --red:#d63b3b;
-  --bg:#ffffff;
-  --card:#17181b;
-  --muted:#9aa3b2;
-  --text:#e1f507;
-  --accent:#0b2e99;
+  --blue:#0a56d8;
+  --gold:#d4a600;
+  --green:#0f8c45;
+  --red:#d43c3c;
+  --bg:#f8f9fc;          /* Lebih terang */
+  --card:#ffffff;        /* Kotak putih */
+  --muted:#5f6a7a;       /* Lebih soft */
+  --text:#1d1f23;        /* Teks lebih gelap */
+  --accent:#dce6ff;      /* Header tabel lebih terang */
 }
+
 *{box-sizing:border-box}
-body{margin:0;padding:18px;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto;background:linear-gradient(180deg,#0b0c0e 0%,#0f1114 100%);color:var(--text)}
-h1{margin:0 0 14px;text-align:center;color:var(--blue);font-size:20px}
-.container{display:flex;gap:12px;flex-wrap:wrap}
-.left,.right{background:var(--card);border-radius:12px;padding:12px;box-shadow:0 6px 18px rgba(3,6,12,0.6)}
-.left{flex:1;min-width:260px;max-width:340px}
-.right{flex:2;min-width:320px}
-h2{margin:0 0 8px;font-size:15px;color:var(--blue)}
-label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
-input[type="number"], input[type="date"], input[type="text"], input[type="password"]{width:100%;padding:8px 10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:#0d0e10;color:var(--text);font-size:13px}
-.row{display:flex;gap:8px;flex-wrap:wrap}
-.row>div{flex:1;min-width:100px}
-.btn{display:inline-block;padding:7px 10px;border-radius:8px;border:none;cursor:pointer;font-size:13px}
+
+body{
+  margin:0;padding:16px;
+  font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto;
+  background:#f4f6fc;             /* Sangat terang */
+  color:var(--text);
+  font-size:14px;
+}
+
+h1{
+  margin:0 0 10px;
+  text-align:center;
+  color:var(--blue);
+  font-size:18px;                 /* lebih kecil */
+}
+
+.container{
+  display:flex;gap:10px;flex-wrap:wrap;
+}
+
+.left,.right{
+  background:var(--card);
+  border-radius:10px;
+  padding:10px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.08); /* shadow ringan */
+}
+
+.left{flex:1;min-width:230px;max-width:300px}
+.right{flex:2;min-width:280px}
+
+h2{
+  margin:0 0 6px;
+  font-size:14px;
+  color:var(--blue);
+}
+
+label{
+  display:block;
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:4px;
+}
+
+input[type="number"],
+input[type="date"],
+input[type="text"],
+input[type="password"]{
+  width:100%;
+  padding:6px 8px;
+  border-radius:6px;
+  border:1px solid #d4d7dd;
+  background:#ffffff;
+  color:var(--text);
+  font-size:12px;
+}
+
+.row{display:flex;gap:6px;flex-wrap:wrap}
+.row>div{flex:1;min-width:90px}
+
+.btn{
+  display:inline-block;
+  padding:6px 8px;
+  border-radius:6px;
+  border:none;
+  cursor:pointer;
+  font-size:12px;
+}
+
 .btn.primary{background:var(--blue);color:#fff}
 .btn.gold{background:var(--gold);color:#000;font-weight:600}
-.btn.ghost{background:transparent;border:1px solid var(--blue);color:var(--blue)}
-.btn.small{padding:5px 8px;font-size:12px;border-radius:7px}
-.total{font-size:13px;color:var(--text);margin-top:8px}
-.muted{color:var(--muted);font-size:12px}
-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px}
-th,td{padding:8px 6px;border-bottom:1px solid rgba(255,255,255,0.03);text-align:left}
-th{background:var(--accent);color:#fff;font-weight:600;font-size:13px}
-tr:hover td{background:rgba(255,255,255,0.02)}
-tfoot td{font-weight:700;background:rgba(0,0,0,0.15);color:var(--gold)}
-.profit-pos{color:var(--green);font-weight:700}
-.profit-neg{color:var(--red);font-weight:700}
-.inline-edit{padding:6px;border-radius:6px;background:#0c0c0d;border:1px solid #222;color:var(--text)}
-.controls{display:flex;gap:8px;flex-wrap:wrap}
-.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-.total-bar{display:flex;gap:12px;align-items:center}
-#totalDisplay{color:var(--muted)}
-@media(max-width:860px){.container{flex-direction:column}}
-/* Login/Register Overlay */
+.btn.ghost{background:#fff;border:1px solid var(--blue);color:var(--blue)}
+.btn.small{padding:4px 6px;font-size:11px;border-radius:5px}
+
+.total{font-size:12px;color:var(--text);margin-top:6px}
+.muted{color:var(--muted);font-size:11px}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:8px;
+  font-size:12px;
+}
+
+th,td{
+  padding:6px 5px;
+  border-bottom:1px solid #e4e6eb;
+  text-align:left;
+}
+
+th{
+  background:var(--accent);
+  color:#1a1a1a;
+  font-weight:600;
+  font-size:12px;
+}
+
+tr:hover td{
+  background:#f0f2f7;
+}
+
+tfoot td{
+  font-weight:700;
+  background:#f2f2f2;
+  color:var(--gold);
+}
+
+.profit-pos{color:var(--green);font-weight:600}
+.profit-neg{color:var(--red);font-weight:600}
+
+.inline-edit{
+  padding:5px;
+  border-radius:5px;
+  background:#ffffff;
+  border:1px solid #ccc;
+  color:var(--text);
+  font-size:12px;
+}
+
+.controls{display:flex;gap:6px;flex-wrap:wrap}
+
+.topbar{
+  display:flex;justify-content:space-between;
+  align-items:center;margin-bottom:6px;
+}
+
+.total-bar{display:flex;gap:10px;align-items:center}
+#totalDisplay{color:var(--muted);font-size:12px}
+
+@media(max-width:860px){
+  .container{flex-direction:column}
+}
+
+/* Login Overlay */
 #loginOverlay,#registerOverlay{
   position:fixed;top:0;left:0;width:100%;height:100%;
-  background:rgba(15,15,20,0.95);display:flex;justify-content:center;align-items:center;z-index:9999;
+  background:rgba(255,255,255,0.9);
+  display:flex;justify-content:center;align-items:center;
+  z-index:9999;
 }
 </style>
 </head>
