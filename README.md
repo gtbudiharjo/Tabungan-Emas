@@ -15,6 +15,23 @@
   --text:#1d1f23;        /* Teks lebih gelap */
   --accent:#dce6ff;      /* Header tabel lebih terang */
 }
+/* ==== FIX AGAR TABEL TIDAK SCROLL KE SAMPING ==== */
+
+.right{
+  flex:2;
+  min-width:320px;
+  overflow-x:auto;
+}
+
+table{
+  width:100%;
+  max-width:100%;
+  table-layout:auto;
+}
+
+td,th{
+  white-space:nowrap;
+}
 
 *{box-sizing:border-box}
 
