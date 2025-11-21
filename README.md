@@ -182,7 +182,7 @@ tfoot td{
   </div>
 </div>
 
-<h1>💰 Tabungan Emas Pegadaian— Gold Mode</h1>
+<h1>💰 Tabungan Emas</h1>
 
 <div class="container">
   <div class="left">
