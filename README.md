@@ -44,8 +44,8 @@ h1{
   box-shadow:0 2px 8px rgba(0,0,0,0.08); /* shadow ringan */
 }
 
-.left{flex:1;min-width:230px;max-width:300px}
-.right{flex:2;min-width:280px}
+.left{flex:2;min-width:300px;max-width:480px}
+.right{flex:3;min-width:280px}
 
 h2{
   margin:0 0 6px;
