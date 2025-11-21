@@ -2,7 +2,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Tabungan Emas Pegadaian— Gold Mode</title>
+<title>Tabungan Emas</title>
 <style>
 :root{
   --blue:#0a56d8;
