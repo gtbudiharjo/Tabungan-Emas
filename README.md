@@ -1,4 +1,3 @@
-
 <html lang="id">
 <head>
 <meta charset="utf-8" />
@@ -10,7 +9,7 @@
   --gold:#e0b300;
   --green:#12a150;
   --red:#d63b3b;
-  --bg:#0f1114;
+  --bg:#ffffff;
   --card:#17181b;
   --muted:#9aa3b2;
   --text:#e1f507;
