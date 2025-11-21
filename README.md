@@ -211,7 +211,7 @@ tfoot td{
     </div>
     <!-- Admin Manual -->
     <div class="card" style="margin-top:12px">
-      <h2>Potong Admin </h2>
+      <h2>Biaya Admin</h2>
       <form id="adminForm">
         <div class="row">
           <div><label>Gram Admin</label><input id="adminGram" type="number" step="0.00001" required></div>
