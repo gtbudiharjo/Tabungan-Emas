@@ -48,7 +48,7 @@ h1{
 
 h2{
   margin:0 0 6px;
-  font-size:12px;
+  font-size:12px !important;
   color:var(--blue);
 }
 
