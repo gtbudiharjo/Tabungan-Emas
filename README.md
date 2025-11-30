@@ -1,3 +1,4 @@
+<!doctype html>
 <html lang="id">
 <head>
 <meta charset="utf-8" />
@@ -167,44 +168,71 @@ tfoot td{font-weight:700;background:rgba(0,0,0,0.08);color:var(--gold)}
 </div>
 </div>
 
+<small id="showRegister" style="cursor:pointer;color:var(--blue);display:block;text-align:center;margin-top:8px;">
+  Belum punya akun? Register
+</small>
+
 <script>
-/* =========================
-   LOGIN / REGISTER
-========================= */
 let currentUser = null;
-const USERS_KEY="goldUsers_final";
-let users = JSON.parse(localStorage.getItem(USERS_KEY)||"[]");
+const USERS_KEY = "goldUsers_final";
+let users = JSON.parse(localStorage.getItem(USERS_KEY) || "[]");
 
 const authBox = document.getElementById("authBox");
 const mainApp = document.getElementById("mainApp");
 const loginForm = document.getElementById("loginForm");
 const showRegister = document.getElementById("showRegister");
 
-showRegister.onclick = ()=>{
-  if(loginForm.querySelector("button").textContent==="Login"){
-    loginForm.querySelector("h2").textContent="Register";
-    loginForm.querySelector("button").textContent="Register";
-    showRegister.textContent="Sudah punya akun? Login";
-  }else{
-    loginForm.querySelector("h2").textContent="Login";
-    loginForm.querySelector("button").textContent="Login";
-    showRegister.textContent="Belum punya akun? Register";
-  }
-}
+let isRegister = false;
 
-<div id="authBox">
-  <h2>Login</h2>
-  <form id="loginForm">
-    <label>Username</label>
-    <input type="text" id="loginUser" required>
-    <label>Password</label>
-    <input type="password" id="loginPass" required>
-    <button class="btn primary" type="submit">Login</button>
-  </form>
-  <small id="showRegister" style="cursor:pointer;color:var(--blue);display:block;text-align:center;margin-top:8px;">
-    Belum punya akun? Register
-  </small>
-</div>
+// Buat clickable
+showRegister.addEventListener("click", () => {
+  isRegister = !isRegister;
+  loginForm.querySelector("h2").textContent = isRegister ? "Register" : "Login";
+  loginForm.querySelector("button").textContent = isRegister ? "Register" : "Login";
+  showRegister.textContent = isRegister ? "Sudah punya akun? Login" : "Belum punya akun? Register";
+  loginForm.reset();
+});
+
+loginForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const username = document.getElementById("loginUser").value.trim();
+  const password = document.getElementById("loginPass").value.trim();
+
+  if (!username || !password) {
+    return alert("Username dan password harus diisi!");
+  }
+
+  if (isRegister) {
+    if (users.find(u => u.username === username)) return alert("❌ Username sudah terdaftar!");
+    users.push({ username, password });
+    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+    alert("✅ Registrasi berhasil! Silahkan login.");
+    isRegister = false;
+    loginForm.querySelector("h2").textContent = "Login";
+    loginForm.querySelector("button").textContent = "Login";
+    showRegister.textContent = "Belum punya akun? Register";
+    loginForm.reset();
+  } else {
+    const user = users.find(u => u.username === username && u.password === password);
+    if (user) {
+      currentUser = user.username;
+      authBox.style.display = "none";
+      mainApp.style.display = "block";
+      if (typeof render === "function") render();
+      if (typeof renderLeftTotals === "function") renderLeftTotals();
+    } else {
+      alert("❌ Username / password salah!");
+    }
+  }
+});
+
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  currentUser = null;
+  authBox.style.display = "block";
+  mainApp.style.display = "none";
+  loginForm.reset();
+});
+</script>
 
 <script>
 let currentUser = null;
