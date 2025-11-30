@@ -1,198 +1,75 @@
+<!doctype html>
 <html lang="id">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Tabungan Emas Pegadaian</title>
 <style>
 :root{
-  --blue:#0a56d8;
-  --gold:#d4a600;
-  --green:#0f8c45;
-  --red:#d43c3c;
-  --bg:#f8f9fc;          /* Lebih terang */
-  --card:#ffffff;        /* Kotak putih */
-  --muted:#5f6a7a;       /* Lebih soft */
-  --text:#1d1f23;        /* Teks lebih gelap */
-  --accent:#dce6ff;      /* Header tabel lebih terang */
+  --blue:#0b61ff;
+  --gold:#e0b300;
+  --green:#12a150;
+  --red:#d63b3b;
+  --bg:#0f1114;
+  --card:#17181b;
+  --muted:#9aa3b2;
+  --text:#e6eef8;
+  --accent:#0b2e99;
 }
-
 *{box-sizing:border-box}
-
-body{
-  margin:0;padding:16px;
-  font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto;
-  background:#f4f6fc;             /* Sangat terang */
-  color:var(--text);
-  font-size:14px;
-}
-
-h1{
-  margin:0 0 10px;
-  text-align:center;
-  color:var(--blue);
-  font-size:18px;                 /* lebih kecil */
-}
-
-.container{
-  display:flex;gap:10px;flex-wrap:wrap;
-}
-
-.left,.right{
-  background:var(--card);
-  border-radius:10px;
-  padding:10px;
-  box-shadow:0 2px 8px rgba(0,0,0,0.08); /* shadow ringan */
-}
-
-.left{flex:1;min-width:230px;max-width:300px}
-.right{flex:5;min-width:600px}
-
-h2{
-  margin:0 0 6px;
-  font-size:12px !important;
-  color:var(--blue);
-}
-
-label{
-  display:block;
-  font-size:12px;
-  color:var(--muted);
-  margin-bottom:4px;
-}
-
-input[type="number"],
-input[type="date"],
-input[type="text"],
-input[type="password"]{
-  width:100%;
-  padding:6px 8px;
-  border-radius:6px;
-  border:1px solid #d4d7dd;
-  background:#ffffff;
-  color:var(--text);
-  font-size:12px;
-}
-
-.row{display:flex;gap:6px;flex-wrap:wrap}
-.row>div{flex:1;min-width:90px}
-
-.btn{
-  display:inline-block;
-  padding:6px 8px;
-  border-radius:6px;
-  border:none;
-  cursor:pointer;
-  font-size:12px;
-}
-
+body{margin:0;padding:18px;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto;background:linear-gradient(180deg,#0b0c0e 0%,#0f1114 100%);color:var(--text)}
+h1{margin:0 0 14px;text-align:center;color:var(--blue);font-size:20px}
+.container{display:flex;gap:12px;flex-wrap:wrap}
+.left,.right{background:var(--card);border-radius:12px;padding:12px;box-shadow:0 6px 18px rgba(3,6,12,0.6)}
+.left{flex:1;min-width:260px;max-width:340px}
+.right{flex:2;min-width:320px}
+h2{margin:0 0 8px;font-size:15px;color:var(--blue)}
+label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+input[type="number"], input[type="date"]{width:100%;padding:8px 10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:#0d0e10;color:var(--text);font-size:13px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.row>div{flex:1;min-width:100px}
+.btn{display:inline-block;padding:7px 10px;border-radius:8px;border:none;cursor:pointer;font-size:13px}
 .btn.primary{background:var(--blue);color:#fff}
 .btn.gold{background:var(--gold);color:#000;font-weight:600}
-.btn.ghost{background:#fff;border:1px solid var(--blue);color:var(--blue)}
-.btn.small{padding:4px 6px;font-size:11px;border-radius:5px}
-
-.total{font-size:12px;color:var(--text);margin-top:6px}
-.muted{color:var(--muted);font-size:11px}
-
-table{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:8px;
-  font-size:12px;
-}
-
-th,td{
-  padding:6px 5px;
-  border-bottom:1px solid #e4e6eb;
-  text-align:left;
-}
-
-th{
-  background:var(--accent);
-  color:#1a1a1a;
-  font-weight:600;
-  font-size:12px;
-}
-
-tr:hover td{
-  background:#f0f2f7;
-}
-
-tfoot td{
-  font-weight:700;
-  background:#f2f2f2;
-  color:var(--gold);
-}
-
-.profit-pos{color:var(--green);font-weight:600}
-.profit-neg{color:var(--red);font-weight:600}
-
-.inline-edit{
-  padding:5px;
-  border-radius:5px;
-  background:#ffffff;
-  border:1px solid #ccc;
-  color:var(--text);
-  font-size:12px;
-}
-
-.controls{display:flex;gap:6px;flex-wrap:wrap}
-
-.topbar{
-  display:flex;justify-content:space-between;
-  align-items:center;margin-bottom:6px;
-}
-
-.total-bar{display:flex;gap:10px;align-items:center}
-#totalDisplay{color:var(--muted);font-size:12px}
-
-@media(max-width:860px){
-  .container{flex-direction:column}
-}
-
-/* Login Overlay */
-#loginOverlay,#registerOverlay{
-  position:fixed;top:0;left:0;width:100%;height:100%;
-  background:rgba(255,255,255,0.9);
-  display:flex;justify-content:center;align-items:center;
-  z-index:9999;
-}
+.btn.ghost{background:transparent;border:1px solid var(--blue);color:var(--blue)}
+.btn.small{padding:5px 8px;font-size:12px;border-radius:7px}
+.total{font-size:13px;color:var(--text);margin-top:8px}
+.muted{color:var(--muted);font-size:12px}
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px}
+th,td{padding:8px 6px;border-bottom:1px solid rgba(255,255,255,0.03);text-align:left}
+th{background:var(--accent);color:#fff;font-weight:600;font-size:13px}
+tr:hover td{background:rgba(255,255,255,0.02)}
+tfoot td{font-weight:700;background:rgba(0,0,0,0.15);color:var(--gold)}
+.profit-pos{color:var(--green);font-weight:700}
+.profit-neg{color:var(--red);font-weight:700}
+.inline-edit{padding:6px;border-radius:6px;background:#0c0c0d;border:1px solid #222;color:var(--text)}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.total-bar{display:flex;gap:12px;align-items:center}
+#totalDisplay{color:var(--muted)}
+@media(max-width:860px){.container{flex-direction:column}}
+#showOld.active { background:#0b2e99;color:#fff;border-color:transparent }
+#showAll.active { background:transparent;color:#0b61ff;border-color:var(--blue) }
+/* Modal */
+#modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);justify-content:center;align-items:center;z-index:999}
+#modalContent{background:var(--card);padding:20px;border-radius:12px;width:300px;max-width:90%}
+#modalContent h3{margin-top:0;color:var(--blue)}
+#modalContent input{margin-bottom:10px}
+.modal-buttons{display:flex;justify-content:flex-end;gap:8px}
 </style>
 </head>
 <body>
-
-<!-- LOGIN OVERLAY -->
-<div id="loginOverlay">
-  <div style="background:var(--card);padding:20px;border-radius:12px;width:280px;text-align:center">
-    <h2 style="margin-bottom:12px;color:var(--blue)">🔒 Login</h2>
-    <input id="loginUser" type="text" placeholder="Username"><br><br>
-    <input id="loginPass" type="password" placeholder="Password"><br><br>
-    <button id="loginBtn" class="btn primary" style="width:100%">Login</button>
-    <p style="margin-top:8px;color:var(--muted);font-size:12px">Belum punya akun? <span id="showRegister" style="color:var(--gold);cursor:pointer">Daftar</span></p>
-  </div>
-</div>
-
-<!-- REGISTER OVERLAY -->
-<div id="registerOverlay" style="display:none">
-  <div style="background:var(--card);padding:20px;border-radius:12px;width:280px;text-align:center">
-    <h2 style="margin-bottom:12px;color:var(--blue)">📝 Daftar</h2>
-    <input id="regUser" type="text" placeholder="Username"><br><br>
-    <input id="regPass" type="password" placeholder="Password"><br><br>
-    <button id="registerBtn" class="btn gold" style="width:100%">Daftar</button>
-    <p style="margin-top:8px;color:var(--muted);font-size:12px">Sudah punya akun? <span id="showLogin" style="color:var(--blue);cursor:pointer">Login</span></p>
-  </div>
-</div>
-
-<h1>💰 Tabungan Emas</h1>
+<h1>💰 Tabungan Emas Pegadaian </h1>
 
 <div class="container">
+
   <div class="left">
-    <!-- Harga Sekarang -->
     <div class="card">
       <h2>Harga Sekarang / gr</h2>
       <input id="currentPrice" type="number" placeholder="Contoh: 999000" step="0.00001" />
     </div>
-    <!-- Tambah Aset -->
     <div class="card" style="margin-top:12px">
-      <h2>Tambah Emas</h2>
+      <h2>Tambah Aset</h2>
       <form id="assetForm">
         <div class="row">
           <div><label>Gram</label><input id="grams" type="number" step="0.00001" required></div>
@@ -209,9 +86,8 @@ tfoot td{
         <div class="muted" id="leftTotalAsset"></div>
       </form>
     </div>
-    <!-- Admin Manual -->
     <div class="card" style="margin-top:12px">
-      <h2>Biaya Admin</h2>
+      <h2>Potong Admin</h2>
       <form id="adminForm">
         <div class="row">
           <div><label>Gram Admin</label><input id="adminGram" type="number" step="0.00001" required></div>
@@ -219,20 +95,6 @@ tfoot td{
         </div>
         <div style="margin-top:10px">
           <button class="btn gold small" type="submit">🛠 Terapkan Admin</button>
-        </div>
-      </form>
-    </div>
-    <!-- Jual Aset -->
-    <div class="card" style="margin-top:12px">
-      <h2>Jual Emas</h2>
-      <form id="sellForm">
-        <div class="row">
-          <div><label>Gram</label><input id="sellGram" type="number" step="0.00001" required></div>
-          <div><label>Harga Jual/gr</label><input id="sellPrice" type="number" step="0.00001" required></div>
-          <div><label>Tanggal Jual</label><input id="sellDate" type="date" required></div>
-        </div>
-        <div style="margin-top:10px">
-          <button class="btn gold" type="submit">💸 Jual</button>
         </div>
       </form>
     </div>
@@ -244,12 +106,11 @@ tfoot td{
         <h2 style="margin:0">Daftar Aset</h2>
         <div class="total-bar">
           <div id="totalDisplay" class="muted">0 g • Rp0</div>
-          <button id="logoutBtn" class="btn small ghost" style="margin-left:8px">🚪 Logout</button>
         </div>
       </div>
 
       <div style="margin:8px 0" class="controls">
-        <button id="showAll" class="btn small ghost">🌍 Semua</button>
+        <button id="showAll" class="btn small ghost active">🌍 Semua</button>
         <button id="showOld" class="btn small ghost">⏳ ≥ 1 Tahun</button>
         <button id="backupJSON" class="btn small gold">📦 Backup JSON</button>
         <input type="file" id="restoreFile" accept=".json" style="display:none">
@@ -258,7 +119,10 @@ tfoot td{
 
       <table id="table">
         <thead>
-          <tr><th>No</th><th>Gram</th><th>Tanggal</th><th>Harga Beli/Jual</th><th>Nilai Beli</th><th>Nilai Sekarang</th><th>Laba</th><th>Aksi</th></tr>
+          <tr>
+            <th>No</th><th>Gram</th><th>Tanggal</th><th>Harga / gr</th>
+            <th>Nilai</th><th>Nilai Sekarang</th><th>Laba</th><th>Aksi</th>
+          </tr>
         </thead>
         <tbody></tbody>
         <tfoot>
@@ -278,250 +142,373 @@ tfoot td{
       <div class="total muted" id="valueTotal"></div>
     </div>
   </div>
+
 </div>
 
-<div style="text-align:center;margin-top:12px;color:var(--muted)">Data tersimpan otomatis di browser (<b>goldAssets_v14</b>)</div>
+<div style="text-align:center;margin-top:12px;color:var(--muted)">
+  Data tersimpan otomatis di browser (<b>goldAssets_final1</b>)
+</div>
+
 <script>
-// ===== LOGIN & REGISTER =====
-const USER_KEY = "goldAssetsUser_v1"; 
-const LS_KEY = "goldAssets_v14";
-
-function hash(s){ return btoa(s); }
-
-function checkLogin(){
-  const loggedIn = sessionStorage.getItem("loggedIn");
-  if(!loggedIn){
-    document.getElementById("loginOverlay").style.display = "flex";
-    document.getElementById("registerOverlay").style.display = "none";
-    document.querySelector(".container").style.display = "none";
-    return false;
-  } else {
-    document.getElementById("loginOverlay").style.display = "none";
-    document.getElementById("registerOverlay").style.display = "none";
-    document.querySelector(".container").style.display = "flex";
-    return true;
-  }
-}
-
-// Toggle login/register
-document.getElementById("showRegister").onclick = ()=>{ 
-  document.getElementById("loginOverlay").style.display="none";
-  document.getElementById("registerOverlay").style.display="flex";
-};
-document.getElementById("showLogin").onclick = ()=>{ 
-  document.getElementById("loginOverlay").style.display="flex";
-  document.getElementById("registerOverlay").style.display="none";
-};
-
-// Register
-document.getElementById("registerBtn").onclick = ()=>{
-  const u = document.getElementById("regUser").value.trim();
-  const p = document.getElementById("regPass").value;
-  if(!u || !p) return alert("Lengkapi username & password");
-  const userData = { username: u, password: hash(p) };
-  localStorage.setItem(USER_KEY, JSON.stringify(userData));
-  alert("Akun berhasil dibuat, silakan login!");
-  document.getElementById("registerOverlay").style.display="none";
-  document.getElementById("loginOverlay").style.display="flex";
-};
-
-// Login
-document.getElementById("loginBtn").onclick = ()=>{
-  const u = document.getElementById("loginUser").value.trim();
-  const p = document.getElementById("loginPass").value;
-  const stored = JSON.parse(localStorage.getItem(USER_KEY) || "{}");
-  if(u === stored.username && hash(p) === stored.password){
-    sessionStorage.setItem("loggedIn", "1");
-    checkLogin();
-  } else {
-    alert("Username atau password salah!");
-  }
-};
-
-// Logout
-document.getElementById("logoutBtn").onclick = function(){
-  sessionStorage.removeItem("loggedIn");
-  location.reload();
-};
-
-// ===== SCRIPT TABUNGAN EMAS =====
-let assets = JSON.parse(localStorage.getItem(LS_KEY) || "[]");
-let filterMode = "all";
-const $ = id => document.getElementById(id);
+/* =========================
+   Storage & Helpers
+========================= */
+const LS_KEY="goldAssets_final";
+let assets = JSON.parse(localStorage.getItem(LS_KEY)||"[]");
+let filterMode="all";
+const $=id=>document.getElementById(id);
 const tbody = document.querySelector("#table tbody");
 
-function save(){ localStorage.setItem(LS_KEY, JSON.stringify(assets)); }
+function save(){ localStorage.setItem(LS_KEY,JSON.stringify(assets)); }
 function formatRp(n){ return "Rp"+Math.round(n||0).toString().replace(/\B(?=(\d{3})+(?!\d))/g,"."); }
-function isOld(d){ return (new Date() - new Date(d)) >= 365*24*60*60*1000; }
-function getSaldoEmas(){ return assets.reduce((s,a)=>s + (Number(a.grams)||0), 0); }
-
-function renderLeftTotals(){
-  const currentPrice = +$("currentPrice").value || 0;
-  const totalGram = getSaldoEmas();
-  const totalBuy = assets.reduce((s,a)=>s + (Number(a.grams)||0) * (Number(a.priceBuy)||0), 0);
-  const totalValue = totalGram * currentPrice;
-  const totalProfit = totalValue - totalBuy;
-
-  $("leftGramTotal").textContent = "Saldo Emas: " + totalGram.toFixed(5) + " g";
-  if(currentPrice > 0){
-    $("leftProfitTotal").innerHTML = (totalProfit >= 0 ? `<span class="profit-pos">Laba: ${formatRp(totalProfit)}</span>` : `<span class="profit-neg">Rugi: ${formatRp(totalProfit)}</span>`);
-    $("leftTotalAsset").textContent = "💰 Total Aset (harga sekarang): " + formatRp(totalValue);
-  } else {
-    $("leftProfitTotal").textContent = "";
-    $("leftTotalAsset").textContent = "";
-  }
+function isOld(d){ const dt=new Date(d); return !isNaN(dt) && (new Date()-dt)>=365*24*60*60*1000; }
+function normalizeItem(item){
+  return {
+    id: item.id || Date.now().toString(36)+Math.random().toString(36).slice(2,6),
+    grams: Number(item.grams)||0,
+    priceBuy: Number(item.priceBuy)||0,
+    date: item.date||new Date().toISOString().slice(0,10),
+    type: item.type ? String(item.type) : (Number(item.grams)<0?"admin":"buy"),
+    parentId: item.parentId||null
+  };
 }
 
-function render(){
-  tbody.innerHTML = "";
+/* =========================
+   Render Left Totals
+========================= */
+function renderLeftTotals(){
   const currentPrice = +$("currentPrice").value || 0;
-  let totalBuy = 0, totalNow = 0, totalProfit = 0;
+  let totalGram = 0, totalBuy = 0, totalNow = 0, totalProfit = 0;
 
-  let filtered = (filterMode === "old") ? assets.filter(a=>isOld(a.date)) : assets.slice();
-  filtered.sort((a,b)=> new Date(a.date) - new Date(b.date));
+  assets.forEach(a => {
+    if(a.type === "buy"){
+      const soldGram = assets.filter(x => x.type === "sell" && x.parentId === a.id)
+                             .reduce((s,x)=>s + x.grams,0);
+      const rem = a.grams - soldGram;
+      const nowVal = rem * currentPrice; // gunakan harga sekarang, selalu
+      const profit = nowVal - rem * a.priceBuy;
+      totalGram += rem;
+      totalBuy += rem * a.priceBuy;
+      totalNow += nowVal;
+      totalProfit += profit;
+    } else if(a.type === "admin"){
+      totalGram += a.grams; // admin biasanya minus
+      totalNow += a.grams * currentPrice; // gunakan harga sekarang
+      totalBuy += 30000; // atau bisa tetap 0, terserah logika beli admin
+      totalProfit += (a.grams * currentPrice) - 30000; // agar laba/rugi konsisten
+    }
+  });
+
+  $("leftGramTotal").textContent=`Saldo Emas: ${totalGram.toFixed(5)} g`;
+  $("leftProfitTotal").innerHTML = totalProfit>=0 ? `<span class="profit-pos">Laba: ${formatRp(totalProfit)}</span>` : `<span class="profit-neg">Rugi: ${formatRp(totalProfit)}</span>`;
+  $("leftTotalAsset").textContent=`💰 Total Aset (harga sekarang): ${formatRp(totalNow)}`;
+}
+
+/* =========================
+   Render Table
+========================= */
+function render(){
+  tbody.innerHTML=""; // reset
+  const currentPrice = +$("currentPrice").value || 0;
+  let totalGram=0,totalBuy=0,totalNow=0,totalProfit=0;
+
+  // Filter
+  let filtered = assets.filter(a=>a.type==="buy"||a.type==="admin");
+  if(filterMode==="old"){
+    filtered = filtered.filter(a=>{
+      const soldGram = assets.filter(x=>x.type==="sell" && x.parentId===a.id)
+                             .reduce((s,x)=>s+x.grams,0);
+      const rem = a.grams - soldGram;
+      return a.type==="admin" || (isOld(a.date) && rem>0);
+    });
+  }
+
+  filtered.sort((a,b)=> new Date(a.date)-new Date(b.date));
 
   filtered.forEach((a,i)=>{
-    const isSell = a.grams < 0;
-    const absGram = Math.abs(Number(a.grams || 0));
-    const price = Number(a.priceBuy || 0);
-    const beli = absGram * price;
-    let nowValue = 0;
-	if(a.type !== "admin"){
-	nowValue = absGram * (currentPrice > 0 ? currentPrice : price);
-	}
-    const now = isSell ? -nowValue : nowValue;
-    let laba = isSell ? -beli : nowValue - beli;
+    if(a.type==="admin"){
+      const trAdmin=document.createElement("tr");
+      trAdmin.dataset.id=a.id;
+      trAdmin.style.color="var(--red)";
+      trAdmin.innerHTML=`
+        <td>-</td>
+        <td>${a.grams.toFixed(5)}</td>
+        <td>${a.date}</td>
+        <td>${formatRp(30000)}</td>
+        <td>${formatRp(30000)}</td>
+        <td>${formatRp(30000)}</td>
+        <td>${formatRp(-30000)}</td>
+        <td>
+          Admin Fee
+          <button class="btn small ghost editAdmin">✏️</button>
+          <button class="btn small ghost delAdmin">❌</button>
+        </td>
+      `;
+      tbody.appendChild(trAdmin);
+      totalGram += a.grams;
+      totalBuy += 30000;
+      totalProfit -= 30000;
+      return;
+    }
 
-    totalBuy += isSell ? -beli : beli;
-    totalNow += now;
-    totalProfit += laba;
+    // Buy
+    const sold = assets.filter(x=>x.type==="sell" && x.parentId===a.id);
+    const soldGram = sold.reduce((s,x)=>s+x.grams,0);
+    const rem = a.grams - soldGram;
+    const nowVal = rem*(currentPrice||a.priceBuy);
+    const profit = nowVal - rem*a.priceBuy;
 
-    const tr = document.createElement("tr");
-    tr.dataset.id = a.id;
-
-    if(a.type==="admin") tr.style.color="var(--red)";
-    else if(isSell) tr.style.color='var(--red)';
-    else if(laba>0) tr.style.color='var(--green)';
-    else tr.style.color='var(--text)';
-
-    const m=["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
-    const d = new Date(a.date || Date.now());
-    const ds = `${d.getDate()} ${m[d.getMonth()]} ${d.getFullYear()}`;
-
-    const label = a.type==="admin" ? "Admin" : (isSell ? "Jual" : "Beli");
-
-    tr.innerHTML = `
+    const tr=document.createElement("tr");
+    tr.dataset.id=a.id;
+    tr.style.color=(soldGram>0?"var(--red)":profit>0?"var(--green)":profit<0?"var(--red)":"var(--text)");
+    if(soldGram>0) tr.style.textDecoration="line-through";
+    tr.innerHTML=`
       <td>${i+1}</td>
-      <td class="grams">${Number(a.grams).toFixed(5)}</td>
-      <td class="date">${ds}</td>
-      <td class="priceBuy">${formatRp(price)}</td>
-      <td>${formatRp(isSell ? -beli : beli)}</td>
-      <td>${now < 0 ? '-' + formatRp(Math.abs(now)) : formatRp(now)}</td>
-      <td>${laba < 0 ? '-' + formatRp(Math.abs(laba)) : formatRp(laba)}</td>
-      <td>${label} 
-        <button class="btn small ghost editBtn">✏️</button>
-        <button class="btn small ghost" onclick="delAsset('${a.id}')">🗑</button>
+      <td>${a.grams.toFixed(5)}</td>
+      <td>${a.date}</td>
+      <td>${formatRp(a.priceBuy)}</td>
+      <td>${formatRp(a.grams*a.priceBuy)}</td>
+      <td>${formatRp(nowVal)}</td>
+      <td>${formatRp(profit)}</td>
+      <td>
+        <button class="btn small ghost editBtn">✏️ Edit</button>
+        <button class="btn small ghost sellBtn">💰 Jual</button>
+        <button class="btn small ghost" onclick="delAsset('${a.id}')">❌</button>
       </td>
     `;
     tbody.appendChild(tr);
 
-    // Edit
-    tr.querySelector(".editBtn").onclick = ()=>{
-      const grams = prompt("Gram:", a.grams);
-      const priceB = prompt("Harga Beli/gr:", a.priceBuy);
-      if(grams && priceB){
-        a.grams = parseFloat(grams);
-        a.priceBuy = parseFloat(priceB);
-        save();
-        render();
-        renderLeftTotals();
-      }
-    };
+    // Historical sell
+    sold.forEach(s=>{
+      const trSell=document.createElement("tr");
+      trSell.dataset.id=s.id;
+      trSell.style.color="var(--blue)";
+      trSell.innerHTML=`
+        <td>${i+1}</td>
+        <td>${s.grams.toFixed(5)}</td>
+        <td>${s.date}</td>
+        <td>${formatRp(s.priceBuy)}</td>
+        <td>${formatRp(s.grams*s.priceBuy)}</td>
+        <td>-</td>
+        <td>-</td>
+        <td>Historical Sell</td>
+      `;
+      tbody.appendChild(trSell);
+    });
+
+    // Remaining buy
+    if(rem>0 && soldGram>0){
+      const trRemain=document.createElement("tr");
+      trRemain.dataset.id=a.id+"_remain";
+      trRemain.style.color=(profit>=0?"var(--green)":"var(--red)");
+      trRemain.innerHTML=`
+        <td>${i+1}</td>
+        <td>${rem.toFixed(5)}</td>
+        <td>${a.date}</td>
+        <td>${formatRp(a.priceBuy)}</td>
+        <td>${formatRp(rem*a.priceBuy)}</td>
+        <td>${formatRp(nowVal)}</td>
+        <td>${formatRp(profit)}</td>
+        <td>
+          <button class="btn small ghost editBtn">✏️ Edit</button>
+          <button class="btn small ghost sellBtn">💰 Jual</button>
+        </td>
+      `;
+      tbody.appendChild(trRemain);
+    }
+
+    totalGram += rem;
+    totalBuy += rem*a.priceBuy;
+    totalNow += nowVal;
+    totalProfit += profit;
   });
 
-  $("footGram").textContent = getSaldoEmas().toFixed(5);
-  $("footBuy").textContent = formatRp(totalBuy);
-  $("footNow").textContent = formatRp(totalNow);
-  $("footProfit").textContent = formatRp(totalProfit);
+  // ===== HITUNG TOTAL SEKARANG AKURAT =====
+const totalNowAccurate = totalGram * (currentPrice || 0);
+const totalProfitAccurate = totalNowAccurate - totalBuy;
 
-  $("totalDisplay").textContent = `${getSaldoEmas().toFixed(5)} g • ${formatRp(totalNow)}`;
-  $("profitTotal").textContent = totalProfit >=0 ? "Laba Total: "+formatRp(totalProfit) : "Rugi Total: "+formatRp(totalProfit);
-  $("valueTotal").textContent = "Nilai Total: "+formatRp(totalNow);
-  renderLeftTotals();
+// ===== UPDATE FOOTER =====
+$("footGram").textContent = totalGram.toFixed(5);                 // Total gram tersisa
+$("footBuy").textContent = formatRp(totalBuy);                    // Total beli
+$("footNow").textContent = formatRp(totalNowAccurate);            // Nilai sekarang akurat
+$("footProfit").textContent = formatRp(totalProfitAccurate);      // Profit akurat
+$("totalDisplay").textContent = `${totalGram.toFixed(5)} g • ${formatRp(totalNowAccurate)}`;
+$("profitTotal").textContent = `💹 Keuntungan: ${formatRp(totalProfitAccurate)}`;
+$("valueTotal").textContent = `💰 Beli: ${formatRp(totalBuy)} | Nilai Sekarang: ${formatRp(totalNowAccurate)}`;
+
 }
 
-// Forms
+/* =========================
+   CRUD & Events
+========================= */
+function delAsset(id){
+  if(confirm("Hapus transaksi?")){
+    assets = assets.filter(a=>a.id!==id && a.parentId!==id);
+    save(); render(); renderLeftTotals();
+  }
+}
+
+tbody.addEventListener("click", e => {
+  const tr = e.target.closest("tr");
+  if (!tr) return;
+  let id = tr.dataset.id;
+  let a = assets.find(x => x.id === id);
+
+  // Jika baris _remain
+  if (!a && id.endsWith("_remain")) {
+    const parentId = id.replace("_remain","");
+    a = assets.find(x => x.id === parentId);
+    id = parentId;
+  }
+  if (!a) return;
+
+  /* =====================
+        EDIT DATA BUY
+  ===================== */
+  if (e.target.classList.contains("editBtn") && a.type==="buy") {
+    const newGram = +prompt("Ubah gram:", a.grams);
+    const newPrice = +prompt("Ubah harga beli/gr:", a.priceBuy);
+    const newDate = prompt("Ubah tanggal (YYYY-MM-DD):", a.date);
+
+    if (!newGram || !newPrice || !newDate) return;
+
+    // Cek apakah sudah ada penjualan → tidak boleh kurang dari total terjual
+    const soldGram = assets.filter(x=>x.type==="sell" && x.parentId===a.id)
+                           .reduce((s,x)=>s+x.grams,0);
+
+    if (newGram < soldGram) {
+      alert("❌ Gram baru tidak boleh lebih kecil dari total gram yang sudah dijual!");
+      return;
+    }
+
+    a.grams = newGram;
+    a.priceBuy = newPrice;
+    a.date = newDate;
+
+    save(); render(); renderLeftTotals();
+  }
+
+  /* =====================
+      EDIT DATA ADMIN
+  ===================== */
+  if (e.target.classList.contains("editAdmin") && a.type==="admin") {
+    const g = +prompt("Ubah gram admin (angka minus):", a.grams);
+    const d = prompt("Tanggal admin (YYYY-MM-DD):", a.date);
+    if (!g || !d) return;
+    a.grams = g > 0 ? -g : g;
+    a.date = d;
+    save(); render(); renderLeftTotals();
+  }
+
+  /* =====================
+           SELL
+  ===================== */
+  if (e.target.classList.contains("sellBtn")) {
+    const rem = a.grams - assets.filter(x=>x.type==="sell" && x.parentId===a.id)
+                                .reduce((s,x)=>s+x.grams,0);
+    const grams = +prompt("Gram dijual (tersisa "+rem.toFixed(5)+" g):", rem.toFixed(5));
+    const price = +prompt("Harga jual/gr:", a.priceBuy);
+    const date = prompt("Tanggal jual (YYYY-MM-DD):", new Date().toISOString().slice(0,10));
+
+    if(grams>0 && grams<=rem && price && date){
+      assets.push({id:Date.now().toString(36), type:"sell", grams, priceBuy:price, date, parentId:a.id});
+      save(); render(); renderLeftTotals();
+    }
+  }
+});
+
 $("assetForm").onsubmit = function(e){
   e.preventDefault();
-  const g = parseFloat($("grams").value);
-  const p = parseFloat($("priceBuy").value);
-  const d = $("date").value;
-  if(isNaN(g)||isNaN(p)||!d) return alert("Lengkapi data");
-  assets.push({ id: Date.now().toString(), grams:g, priceBuy:p, date:d, type:"buy" });
-  save(); render(); $("assetForm").reset();
+  const grams= +$("grams").value;
+  const price= +$("priceBuy").value;
+  const date= $("date").value;
+  assets.push({id:Date.now().toString(36), grams, priceBuy:price, date, type:"buy"});
+  save(); render(); renderLeftTotals();
+  this.reset();
 };
-$("sellForm").onsubmit = function(e){
-  e.preventDefault();
-  const g = parseFloat($("sellGram").value);
-  const p = parseFloat($("sellPrice").value);
-  const d = $("sellDate").value;
-  if(isNaN(g)||isNaN(p)||!d) return alert("Lengkapi data");
-  assets.push({ id: Date.now().toString(), grams:-g, priceBuy:p, date:d, type:"sell" });
-  save(); render(); $("sellForm").reset();
-};
+
 $("adminForm").onsubmit = function(e){
   e.preventDefault();
-  const g = parseFloat($("adminGram").value);
-  const d = $("adminDate").value;
-  if(isNaN(g)||!d) return alert("Lengkapi data");
-  assets.push({ id: Date.now().toString(), grams:-g, priceBuy:0, date:d, type:"admin" });
-  save(); render(); $("adminForm").reset();
+  const grams = -Math.abs(+$("adminGram").value);
+  const date = $("adminDate").value;
+  assets.push({id:Date.now().toString(36), grams, priceBuy:30000, date, type:"admin"});
+  save(); render(); renderLeftTotals();
+  this.reset();
 };
 
-// Controls
-$("clearAll").onclick = ()=>{
-  if(confirm("Hapus semua aset?")){ assets=[]; save(); render(); }
-};
-$("showAll").onclick = ()=>{ filterMode="all"; render(); };
-$("showOld").onclick = ()=>{ filterMode="old"; render(); };
-$("currentPrice").oninput = render;
+$("clearAll").onclick = ()=>{ if(confirm("Hapus semua data?")){ assets=[]; save(); render(); renderLeftTotals(); } };
+$("currentPrice").oninput = ()=>{ render(); renderLeftTotals(); };
 
-// Zakat
-$("zakatBtn").onclick = function(){
-  const totalGram = getSaldoEmas();
-  const nishab = 85; // gram
-  if(totalGram>=nishab){
-    const zakat = totalGram*0.025;
-    alert("Zakat Wajib: "+zakat.toFixed(5)+" g");
+/* =========================
+   Backup & Restore
+========================= */
+$("backupJSON").onclick=()=>{
+  const blob = new Blob([JSON.stringify(assets)],{type:"application/json"});
+  const a = document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="Pegadaian.json";
+  a.click();
+};
+$("restoreJSON").onclick = ()=> $("restoreFile").click();
+$("restoreFile").onchange=function(e){
+  const f=e.target.files[0];
+  if(!f) return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    try{
+      const parsed = JSON.parse(ev.target.result);
+      if(Array.isArray(parsed)){
+        const incoming = parsed.map(normalizeItem);
+        assets = incoming;
+        save(); render(); renderLeftTotals();
+        alert("✅ Data berhasil dipulihkan tanpa dobel.");
+      } else alert("File JSON tidak berisi array transaksi.");
+    }catch(err){ console.error(err); alert("Gagal membaca JSON. Periksa format file."); }
+  };
+  r.readAsText(f);
+};
+
+/* =========================
+   Sortir ≥1 Tahun
+========================= */
+$("showOld").onclick = ()=>{
+  filterMode = "old";
+  $("showOld").classList.add("active");
+  $("showAll").classList.remove("active");
+  render();
+};
+$("showAll").onclick = ()=>{
+  filterMode = "all";
+  $("showAll").classList.add("active");
+  $("showOld").classList.remove("active");
+  render();
+};
+
+/* =========================
+   Zakat
+========================= */
+$("zakatBtn").onclick = function() {
+  const currentPrice = +$("currentPrice").value || 0;
+  if(currentPrice <= 0) return alert("Masukkan harga emas saat ini!");
+
+  // Ambil total gram setahun dari footer tabel
+  const totalGramOld = +$("footGram").textContent || 0;
+  const totalNow = +$("footNow").textContent.replace(/[^0-9]/g,"") || 0; // angka di footer tanpa Rp/format
+
+  const nishab = 85 * currentPrice;
+
+  if(totalNow < nishab){
+    alert(`⏳ Belum wajib zakat\nSaldo gram (≥1 tahun): ${totalGramOld.toFixed(5)} g\nNilai aset sekarang: ${formatRp(totalNow)}\nNishab: ${formatRp(nishab)}`);
   } else {
-    alert("Belum wajib zakat (nishab 85g)");
+    const zakat = totalNow * 0.025;
+    alert(`🎉 Sudah wajib zakat\nSaldo gram (≥1 tahun): ${totalGramOld.toFixed(5)} g\nNilai aset sekarang: ${formatRp(totalNow)}\nNishab: ${formatRp(nishab)}\nZakat 2,5% = ${formatRp(zakat)}`);
   }
 };
 
-// Backup / Restore
-$("backupJSON").onclick = ()=>{ 
-  const blob = new Blob([JSON.stringify(assets,null,2)],{type:"application/json"});
-  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download="goldAssetsBackup.json"; a.click();
-};
-$("restoreJSON").onclick = ()=>{$("restoreFile").click();};
-$("restoreFile").onchange = function(e){
-  const file = e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = ()=>{ 
-    try{ assets = JSON.parse(reader.result); save(); render(); alert("Restore berhasil"); } 
-    catch{ alert("File tidak valid"); }
-  };
-  reader.readAsText(file);
-};
-
-// Delete single asset
-function delAsset(id){ 
-  if(confirm("Hapus aset ini?")){ assets=assets.filter(a=>a.id!==id); save(); render(); }
-}
-
-checkLogin(); 
-render();
+/* =========================
+   Init
+========================= */
+render(); renderLeftTotals();
 </script>
 </body>
 </html>
