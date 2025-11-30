@@ -43,12 +43,11 @@ th{background:var(--blue);color:#fff;font-weight:600;font-size:13px}
 .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
 .total-bar{display:flex;gap:12px;align-items:center}
 #totalDisplay{color:var(--muted)}
-.auth-container{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:12px}
-.auth-box{padding:12px;background:#fff;border:1px solid #ccc;min-width:260px;border-radius:8px}
-.auth-box h2{margin-bottom:8px;font-size:16px;text-align:center}
+.auth-box{padding:20px;background:#fff;border:1px solid #ccc;max-width:300px;margin:20px auto;border-radius:8px;text-align:center}
 .auth-box input{margin-bottom:6px;padding:6px;font-size:14px}
-.auth-box button{width:100%;padding:6px;font-size:14px}
-@media(max-width:860px){.container,.auth-container{flex-direction:column}}
+.auth-box button{width:100%;padding:6px;font-size:14px;margin-bottom:6px}
+.auth-box small{display:block;margin-top:6px;color:var(--blue);cursor:pointer;text-decoration:underline}
+@media(max-width:860px){.container{flex-direction:column}}
 </style>
 </head>
 <body>
@@ -56,17 +55,16 @@ th{background:var(--blue);color:#fff;font-weight:600;font-size:13px}
 <h1>💰 Tabungan Emas Pegadaian — Light Mode</h1>
 
 <!-- LOGIN / REGISTER -->
-<div class="auth-container" id="authContainer">
-  <div class="auth-box">
-    <h2>Login</h2>
-    <form id="loginForm">
-      <input type="text" id="loginUser" placeholder="Username" required />
-      <input type="password" id="loginPass" placeholder="Password" required />
-      <button type="submit" class="btn primary">Login</button>
-    </form>
-  </div>
-  <div class="auth-box">
-    <h2>Register</h2>
+<div id="authContainer" class="auth-box">
+  <h2>Login</h2>
+  <form id="loginForm">
+    <input type="text" id="loginUser" placeholder="Username" required />
+    <input type="password" id="loginPass" placeholder="Password" required />
+    <button type="submit" class="btn primary">Login</button>
+  </form>
+  <small id="showRegister">Belum punya akun? Register</small>
+
+  <div id="registerFormContainer" style="display:none;margin-top:10px">
     <form id="registerForm">
       <input type="text" id="regUser" placeholder="Username" required />
       <input type="password" id="regPass" placeholder="Password" required />
@@ -166,15 +164,17 @@ th{background:var(--blue);color:#fff;font-weight:600;font-size:13px}
 </div>
 
 <script>
-/* =========================
-   LOGIN / REGISTER
-========================= */
+// ================= LOGIN / REGISTER =================
 const LS_USERS = "goldUsers_final";
 let currentUser = null;
-
 function saveUsers(users){ localStorage.setItem(LS_USERS, JSON.stringify(users)); }
 function getUsers(){ return JSON.parse(localStorage.getItem(LS_USERS)||"[]"); }
 
+const showRegisterLink = document.getElementById("showRegister");
+const registerContainer = document.getElementById("registerFormContainer");
+showRegisterLink.onclick = ()=>{ registerContainer.style.display = registerContainer.style.display==="none"?"block":"none"; };
+
+// Register
 document.getElementById("registerForm").onsubmit = function(e){
   e.preventDefault();
   const user = document.getElementById("regUser").value.trim();
@@ -185,9 +185,10 @@ document.getElementById("registerForm").onsubmit = function(e){
   users.push({user, pass});
   saveUsers(users);
   alert("✅ Registrasi berhasil! Silakan login.");
-  this.reset();
+  this.reset(); registerContainer.style.display="none";
 };
 
+// Login
 document.getElementById("loginForm").onsubmit = function(e){
   e.preventDefault();
   const user = document.getElementById("loginUser").value.trim();
@@ -204,191 +205,118 @@ document.getElementById("loginForm").onsubmit = function(e){
 
 document.getElementById("logoutBtn").onclick = ()=>{
   currentUser = null;
-  document.getElementById("authContainer").style.display="flex";
+  document.getElementById("authContainer").style.display="block";
   document.getElementById("mainApp").style.display="none";
 };
 
-/* =========================
-   Storage & Helpers (Emas)
-========================= */
+// ================= STORAGE & HELPERS EMAS =================
 const LS_KEY="goldAssets_final";
 let assets = JSON.parse(localStorage.getItem(LS_KEY)||"[]");
 let filterMode="all";
 const $=id=>document.getElementById(id);
 const tbody = document.querySelector("#table tbody");
-
 function save(){ localStorage.setItem(LS_KEY,JSON.stringify(assets)); }
 function formatRp(n){ return "Rp"+Math.round(n||0).toString().replace(/\B(?=(\d{3})+(?!\d))/g,"."); }
 function isOld(d){ const dt=new Date(d); return !isNaN(dt) && (new Date()-dt)>=365*24*60*60*1000; }
 function normalizeItem(item){
-  return {
-    id: item.id || Date.now().toString(36)+Math.random().toString(36).slice(2,6),
-    grams: Number(item.grams)||0,
-    priceBuy: Number(item.priceBuy)||0,
-    date: item.date||new Date().toISOString().slice(0,10),
-    type: item.type ? String(item.type) : (Number(item.grams)<0?"admin":"buy"),
-    parentId: item.parentId||null
-  };
+  return { id: item.id || Date.now().toString(36)+Math.random().toString(36).slice(2,6),
+           grams: Number(item.grams)||0,
+           priceBuy: Number(item.priceBuy)||0,
+           date: item.date||new Date().toISOString().slice(0,10),
+           type: item.type ? String(item.type) : (Number(item.grams)<0?"admin":"buy"),
+           parentId: item.parentId||null };
 }
 
-/* =========================
-   Render Left Totals
-========================= */
+// ================= RENDER TOTALS =================
 function renderLeftTotals(){
   const currentPrice = +$("currentPrice").value || 0;
   let totalGram = 0, totalBuy = 0, totalNow = 0, totalProfit = 0;
-
   assets.forEach(a => {
-    if(a.type === "buy"){
-      const soldGram = assets.filter(x => x.type==="sell" && x.parentId === a.id)
-                             .reduce((s,x)=>s + x.grams,0);
+    if(a.type==="buy"){
+      const soldGram = assets.filter(x=>x.type==="sell" && x.parentId===a.id).reduce((s,x)=>s+x.grams,0);
       const rem = a.grams - soldGram;
-      const nowVal = rem * currentPrice;
-      const profit = nowVal - rem * a.priceBuy;
-      totalGram += rem;
-      totalBuy += rem * a.priceBuy;
-      totalNow += nowVal;
-      totalProfit += profit;
-    } else if(a.type === "admin"){
-      totalGram += a.grams;
-      totalNow += a.grams * currentPrice;
-      totalBuy += 30000;
-      totalProfit += (a.grams * currentPrice) - 30000;
+      const nowVal = rem*currentPrice;
+      const profit = nowVal - rem*a.priceBuy;
+      totalGram += rem; totalBuy += rem*a.priceBuy; totalNow += nowVal; totalProfit += profit;
+    } else if(a.type==="admin"){
+      totalGram += a.grams; totalNow += a.grams*currentPrice; totalBuy += 30000; totalProfit += a.grams*currentPrice-30000;
     }
   });
-
   $("leftGramTotal").textContent=`Saldo Emas: ${totalGram.toFixed(5)} g`;
-  $("leftProfitTotal").innerHTML = totalProfit>=0 ? `<span class="profit-pos">Laba: ${formatRp(totalProfit)}</span>` : `<span class="profit-neg">Rugi: ${formatRp(totalProfit)}</span>`;
+  $("leftProfitTotal").innerHTML = totalProfit>=0? `<span class="profit-pos">Laba: ${formatRp(totalProfit)}</span>`:`<span class="profit-neg">Rugi: ${formatRp(totalProfit)}</span>`;
   $("leftTotalAsset").textContent=`💰 Total Aset (harga sekarang): ${formatRp(totalNow)}`;
 }
 
-/* =========================
-   Render Table
-========================= */
+// ================= RENDER TABLE =================
 function render(){
-  tbody.innerHTML="";
-  const currentPrice = +$("currentPrice").value || 0;
+  tbody.innerHTML=""; const currentPrice = +$("currentPrice").value || 0;
   let totalGram=0,totalBuy=0,totalNow=0,totalProfit=0;
-
   let filtered = assets.filter(a=>a.type==="buy"||a.type==="admin");
-  if(filterMode==="old"){
-    filtered = filtered.filter(a=>{ 
-      const soldGram = assets.filter(x=>x.type==="sell" && x.parentId===a.id).reduce((s,x)=>s+x.grams,0);
-      const rem = a.grams - soldGram;
-      return a.type==="admin" || (isOld(a.date) && rem>0);
-    });
-  }
-
+  if(filterMode==="old"){ filtered = filtered.filter(a=>{ const soldGram = assets.filter(x=>x.type==="sell" && x.parentId===a.id).reduce((s,x)=>s+x.grams,0); const rem = a.grams - soldGram; return a.type==="admin" || (isOld(a.date) && rem>0); }); }
   filtered.sort((a,b)=> new Date(a.date)-new Date(b.date));
-
   filtered.forEach((a,i)=>{
-    if(a.type==="admin"){
-      const trAdmin=document.createElement("tr");
-      trAdmin.dataset.id=a.id;
-      trAdmin.style.color="var(--red)";
-      trAdmin.innerHTML=`
-        <td>-</td>
-        <td>${a.grams.toFixed(5)}</td>
-        <td>${a.date}</td>
-        <td>${formatRp(30000)}</td>
-        <td>${formatRp(30000)}</td>
-        <td>${formatRp(30000)}</td>
-        <td>${formatRp(-30000)}</td>
-        <td>Admin Fee <button class="btn small ghost editAdmin">✏️</button> <button class="btn small ghost delAdmin">❌</button></td>
-      `;
-      tbody.appendChild(trAdmin);
-      totalGram += a.grams;
-      totalBuy += 30000;
-      totalProfit -= 30000;
-      return;
-    }
-
+    if(a.type==="admin"){ const trAdmin=document.createElement("tr"); trAdmin.dataset.id=a.id; trAdmin.style.color="var(--red)";
+      trAdmin.innerHTML=`<td>-</td><td>${a.grams.toFixed(5)}</td><td>${a.date}</td><td>${formatRp(30000)}</td><td>${formatRp(30000)}</td><td>${formatRp(30000)}</td><td>${formatRp(-30000)}</td><td>Admin Fee <button class="btn small ghost editAdmin">✏️</button> <button class="btn small ghost delAdmin">❌</button></td>`;
+      tbody.appendChild(trAdmin); totalGram+=a.grams; totalBuy+=30000; totalProfit-=30000; return; }
     const sold = assets.filter(x=>x.type==="sell" && x.parentId===a.id);
-    const soldGram = sold.reduce((s,x)=>s+x.grams,0);
-    const rem = a.grams - soldGram;
-    const nowVal = rem*(currentPrice||a.priceBuy);
-    const profit = nowVal - rem*a.priceBuy;
-
-    const tr=document.createElement("tr");
-    tr.dataset.id=a.id;
-    tr.style.color=(soldGram>0?"var(--red)":profit>0?"var(--green)":profit<0?"var(--red)":"var(--text)");
+    const soldGram = sold.reduce((s,x)=>s+x.grams,0); const rem = a.grams - soldGram;
+    const nowVal = rem*(currentPrice||a.priceBuy); const profit = nowVal - rem*a.priceBuy;
+    const tr=document.createElement("tr"); tr.dataset.id=a.id; tr.style.color=(soldGram>0?"var(--red)":profit>0?"var(--green)":profit<0?"var(--red)":"var(--text)");
     if(soldGram>0) tr.style.textDecoration="line-through";
-    tr.innerHTML=`
-      <td>${i+1}</td>
-      <td>${a.grams.toFixed(5)}</td>
-      <td>${a.date}</td>
-      <td>${formatRp(a.priceBuy)}</td>
-      <td>${formatRp(a.grams*a.priceBuy)}</td>
-      <td>${formatRp(nowVal)}</td>
-      <td>${formatRp(profit)}</td>
-      <td>
-        <button class="btn small ghost editBtn">✏️ Edit</button>
-        <button class="btn small ghost sellBtn">💰 Jual</button>
-        <button class="btn small ghost" onclick="delAsset('${a.id}')">❌</button>
-      </td>
-    `;
+    tr.innerHTML=`<td>${i+1}</td><td>${a.grams.toFixed(5)}</td><td>${a.date}</td><td>${formatRp(a.priceBuy)}</td><td>${formatRp(a.grams*a.priceBuy)}</td><td>${formatRp(nowVal)}</td><td>${formatRp(profit)}</td><td><button class="btn small ghost editBtn">✏️ Edit</button><button class="btn small ghost sellBtn">💰 Jual</button><button class="btn small ghost" onclick="delAsset('${a.id}')">❌</button></td>`;
     tbody.appendChild(tr);
-
-    sold.forEach(s=>{
-      const trSell=document.createElement("tr");
-      trSell.dataset.id=s.id;
-      trSell.style.color="var(--blue)";
-      trSell.innerHTML=`
-        <td>${i+1}</td>
-        <td>${s.grams.toFixed(5)}</td>
-        <td>${s.date}</td>
-        <td>${formatRp(s.priceBuy)}</td>
-        <td>${formatRp(s.grams*s.priceBuy)}</td>
-        <td>-</td>
-        <td>-</td>
-        <td>Historical Sell</td>
-      `;
-      tbody.appendChild(trSell);
-    });
-
-    if(rem>0 && soldGram>0){
-      const trRemain=document.createElement("tr");
-      trRemain.dataset.id=a.id+"_remain";
-      trRemain.style.color=(profit>=0?"var(--green)":"var(--red)");
-      trRemain.innerHTML=`
-        <td>${i+1}</td>
-        <td>${rem.toFixed(5)}</td>
-        <td>${a.date}</td>
-        <td>${formatRp(a.priceBuy)}</td>
-        <td>${formatRp(rem*a.priceBuy)}</td>
-        <td>${formatRp(nowVal)}</td>
-        <td>${formatRp(profit)}</td>
-        <td>
-          <button class="btn small ghost editBtn">✏️ Edit</button>
-          <button class="btn small ghost sellBtn">💰 Jual</button>
-        </td>
-      `;
-      tbody.appendChild(trRemain);
-    }
-
-    totalGram += rem;
-    totalBuy += rem*a.priceBuy;
-    totalNow += nowVal;
-    totalProfit += profit;
+    sold.forEach(s=>{ const trSell=document.createElement("tr"); trSell.dataset.id=s.id; trSell.style.color="var(--blue)"; trSell.innerHTML=`<td>${i+1}</td><td>${s.grams.toFixed(5)}</td><td>${s.date}</td><td>${formatRp(s.priceBuy)}</td><td>${formatRp(s.grams*s.priceBuy)}</td><td>-</td><td>-</td><td>Historical Sell</td>`; tbody.appendChild(trSell); });
+    if(rem>0 && soldGram>0){ const trRemain=document.createElement("tr"); trRemain.dataset.id=a.id+"_remain"; trRemain.style.color=(profit>=0?"var(--green)":"var(--red)"); trRemain.innerHTML=`<td>${i+1}</td><td>${rem.toFixed(5)}</td><td>${a.date}</td><td>${formatRp(a.priceBuy)}</td><td>${formatRp(rem*a.priceBuy)}</td><td>${formatRp(nowVal)}</td><td>${formatRp(profit)}</td><td><button class="btn small ghost editBtn">✏️ Edit</button><button class="btn small ghost sellBtn">💰 Jual</button></td>`; tbody.appendChild(trRemain);}
+    totalGram+=rem; totalBuy+=rem*a.priceBuy; totalNow+=nowVal; totalProfit+=profit;
   });
-
-  const totalNowAccurate = totalGram * (currentPrice || 0);
-  const totalProfitAccurate = totalNowAccurate - totalBuy;
-
-  $("footGram").textContent = totalGram.toFixed(5);
-  $("footBuy").textContent = formatRp(totalBuy);
-  $("footNow").textContent = formatRp(totalNowAccurate);
-  $("footProfit").textContent = formatRp(totalProfitAccurate);
-  $("totalDisplay").textContent = `${totalGram.toFixed(5)} g • ${formatRp(totalNowAccurate)}`;
-  $("profitTotal").textContent = `💹 Keuntungan: ${formatRp(totalProfitAccurate)}`;
-  $("valueTotal").textContent = `💰 Beli: ${formatRp(totalBuy)} | Nilai Sekarang: ${formatRp(totalNowAccurate)}`;
+  const totalNowAccurate = totalGram*(currentPrice||0); const totalProfitAccurate=totalNowAccurate-totalBuy;
+  $("footGram").textContent = totalGram.toFixed(5); $("footBuy").textContent=formatRp(totalBuy);
+  $("footNow").textContent=formatRp(totalNowAccurate); $("footProfit").textContent=formatRp(totalProfitAccurate);
+  $("totalDisplay").textContent=`${totalGram.toFixed(5)} g • ${formatRp(totalNowAccurate)}`;
+  $("profitTotal").textContent=`💹 Keuntungan: ${formatRp(totalProfitAccurate)}`;
+  $("valueTotal").textContent=`💰 Beli: ${formatRp(totalBuy)} | Nilai Sekarang: ${formatRp(totalNowAccurate)}`;
 }
 
-/* =========================
-   CRUD & Events
-========================= */
-// Sama seperti script sebelumnya (edit, sell, admin, tambah aset, clear all, zakat)
-... (untuk ringkas, semua JS sebelumnya tetap digunakan)
+// ================= CRUD & EVENTS EMAS =================
+function delAsset(id){ if(confirm("Hapus transaksi?")){ assets=assets.filter(a=>a.id!==id && a.parentId!==id); save(); render(); renderLeftTotals(); } }
+
+tbody.addEventListener("click", e=>{
+  const tr=e.target.closest("tr"); if(!tr) return; let id=tr.dataset.id; let a=assets.find(x=>x.id===id);
+  if(!a && id.endsWith("_remain")){ const parentId=id.replace("_remain",""); a=assets.find(x=>x.id===parentId); id=parentId; } if(!a) return;
+  if(e.target.classList.contains("editBtn") && a.type==="buy"){ const newGram=+prompt("Ubah gram:",a.grams); const newPrice=+prompt("Ubah harga beli/gr:",a.priceBuy); const newDate=prompt("Ubah tanggal (YYYY-MM-DD):",a.date);
+    if(!newGram||!newPrice||!newDate) return; const soldGram=assets.filter(x=>x.type==="sell"&&x.parentId===a.id).reduce((s,x)=>s+x.grams,0); if(newGram<soldGram){ alert("❌ Gram baru tidak boleh lebih kecil dari total gram yang sudah dijual!"); return; }
+    a.grams=newGram; a.priceBuy=newPrice; a.date=newDate; save(); render(); renderLeftTotals(); }
+  if(e.target.classList.contains("editAdmin") && a.type==="admin"){ const g=+prompt("Ubah gram admin (angka minus):",a.grams); const d=prompt("Tanggal admin (YYYY-MM-DD):",a.date); if(!g||!d) return; a.grams=g>0?-g:g; a.date=d; save(); render(); renderLeftTotals(); }
+  if(e.target.classList.contains("sellBtn")){ const rem=a.grams-assets.filter(x=>x.type==="sell"&&x.parentId===a.id).reduce((s,x)=>s+x.grams,0); const grams=+prompt("Gram dijual (tersisa "+rem.toFixed(5)+" g):",rem.toFixed(5)); const price=+prompt("Harga jual/gr:",a.priceBuy); const date=prompt("Tanggal jual (YYYY-MM-DD):",new Date().toISOString().slice(0,10));
+    if(grams>0 && grams<=rem && price && date){ assets.push({id:Date.now().toString(36), type:"sell", grams, priceBuy:price, date, parentId:a.id}); save(); render(); renderLeftTotals(); } }
+});
+
+$("assetForm").onsubmit=function(e){ e.preventDefault(); const grams=+$("grams").value; const price=+$("priceBuy").value; const date=$("date").value; assets.push({id:Date.now().toString(36), grams, priceBuy:price, date, type:"buy"}); save(); render(); renderLeftTotals(); this.reset(); };
+$("adminForm").onsubmit=function(e){ e.preventDefault(); const grams=-Math.abs(+$("adminGram").value); const date=$("adminDate").value; assets.push({id:Date.now().toString(36), grams, priceBuy:30000, date, type:"admin"}); save(); render(); renderLeftTotals(); this.reset(); };
+$("clearAll").onclick=()=>{ if(confirm("Hapus semua data?")){ assets=[]; save(); render(); renderLeftTotals(); } };
+$("currentPrice").oninput=()=>{ render(); renderLeftTotals(); };
+
+// ================= BACKUP & RESTORE =================
+$("backupJSON").onclick=()=>{ const blob=new Blob([JSON.stringify(assets)],{type:"application/json"}); const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="Pegadaian.json"; a.click(); };
+$("restoreJSON").onclick=()=>$("restoreFile").click();
+$("restoreFile").onchange=function(e){ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=ev=>{ try{ const parsed=JSON.parse(ev.target.result); if(Array.isArray(parsed)){ assets=parsed.map(normalizeItem); save(); render(); renderLeftTotals(); alert("✅ Data berhasil dipulihkan."); }else alert("File JSON tidak berisi array."); }catch(err){ console.error(err); alert("Gagal membaca JSON."); } }; r.readAsText(f); };
+
+// ================= SORTIR ≥1 TAHUN =================
+$("showOld").onclick=()=>{ filterMode="old"; $("showOld").classList.add("active"); $("showAll").classList.remove("active"); render(); };
+$("showAll").onclick=()=>{ filterMode="all"; $("showAll").classList.add("active"); $("showOld").classList.remove("active"); render(); };
+
+// ================= ZAKAT =================
+$("zakatBtn").onclick=function(){
+  const currentPrice=+$("currentPrice").value||0; if(currentPrice<=0) return alert("Masukkan harga emas saat ini!");
+  const totalGramOld=+$("footGram").textContent||0;
+  const totalNow=+$("footNow").textContent.replace(/[^0-9]/g,"")||0;
+  const nishab=85*currentPrice;
+  if(totalNow<nishab){ alert(`⏳ Belum wajib zakat\nSaldo gram (≥1 tahun): ${totalGramOld.toFixed(5)} g\nNilai aset sekarang: ${formatRp(totalNow)}\nNishab: ${formatRp(nishab)}`); }
+  else{ const zakat=totalNow*0.025; alert(`🎉 Sudah wajib zakat\nSaldo gram (≥1 tahun): ${totalGramOld.toFixed(5)} g\nNilai aset sekarang: ${formatRp(totalNow)}\nNishab: ${formatRp(nishab)}\nZakat 2,5% = ${formatRp(zakat)}`); }
+};
+
+// ================= INIT =================
+render(); renderLeftTotals();
 </script>
 </body>
 </html>
