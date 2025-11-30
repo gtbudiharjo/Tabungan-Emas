@@ -1,4 +1,3 @@
-<!doctype html>
 <html lang="id">
 <head>
 <meta charset="utf-8" />
@@ -62,6 +61,76 @@ tfoot td{font-weight:700;background:rgba(0,0,0,0.2);color:var(--gold)}
 </head>
 <body>
 
+<h2>Login</h2>
+<form id="loginForm">
+  <input type="text" id="loginUser" placeholder="Username" required>
+  <input type="password" id="loginPass" placeholder="Password" required>
+  <button type="submit">Login</button>
+  <p>Belum punya akun? <a href="#" id="showRegister">Daftar di sini</a></p>
+</form>
+
+<h2 class="hidden" id="registerTitle">Register</h2>
+<form id="registerForm" class="hidden">
+  <input type="text" id="regUser" placeholder="Username" required>
+  <input type="password" id="regPass" placeholder="Password" required>
+  <button type="submit">Register</button>
+  <p>Sudah punya akun? <a href="#" id="showLogin">Login</a></p>
+</form>
+
+<h2 class="hidden" id="welcome">Selamat datang, <span id="userName"></span>!</h2>
+<button class="hidden" id="logoutBtn">Logout</button>
+
+<script>
+const loginForm = document.getElementById("loginForm");
+const registerForm = document.getElementById("registerForm");
+const showRegister = document.getElementById("showRegister");
+const showLogin = document.getElementById("showLogin");
+const welcome = document.getElementById("welcome");
+const userNameSpan = document.getElementById("userName");
+const logoutBtn = document.getElementById("logoutBtn");
+
+// Tampilkan register/login
+showRegister.onclick = e => { e.preventDefault(); loginForm.classList.add("hidden"); registerForm.classList.remove("hidden"); document.getElementById("registerTitle").classList.remove("hidden"); }
+showLogin.onclick = e => { e.preventDefault(); loginForm.classList.remove("hidden"); registerForm.classList.add("hidden"); document.getElementById("registerTitle").classList.add("hidden"); }
+
+// Register
+registerForm.onsubmit = e => {
+  e.preventDefault();
+  const user = document.getElementById("regUser").value;
+  const pass = document.getElementById("regPass").value;
+  let users = JSON.parse(localStorage.getItem("users")||"{}");
+  if(users[user]) return alert("Username sudah dipakai!");
+  users[user] = pass;
+  localStorage.setItem("users", JSON.stringify(users));
+  alert("Berhasil daftar!");
+  showLogin.click();
+  registerForm.reset();
+}
+
+// Login
+loginForm.onsubmit = e => {
+  e.preventDefault();
+  const user = document.getElementById("loginUser").value;
+  const pass = document.getElementById("loginPass").value;
+  let users = JSON.parse(localStorage.getItem("users")||"{}");
+  if(users[user] && users[user]===pass){
+    userNameSpan.textContent = user;
+    loginForm.classList.add("hidden");
+    registerForm.classList.add("hidden");
+    document.getElementById("registerTitle").classList.add("hidden");
+    welcome.classList.remove("hidden");
+    logoutBtn.classList.remove("hidden");
+    localStorage.setItem("loggedInUser", user);
+  } else alert("Username atau password salah!");
+}
+
+// Logout
+logoutBtn.onclick = () => {
+  localStorage.removeItem("loggedInUser");
+  loginForm.classList.remove("hidden");
+  welcome.classList.add("hidden");
+  logoutBtn.classList.add("hidden");
+}
 <div id="loginModal">
   <div id="loginContent">
     <h3>Login</h3>
