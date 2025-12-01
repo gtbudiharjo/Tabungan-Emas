@@ -35,8 +35,46 @@ input[type="number"], input[type="date"]{width:100%;padding:8px 10px;border-radi
 .btn.small{padding:5px 8px;font-size:12px;border-radius:7px}
 .total{font-size:13px;color:var(--text);margin-top:8px}
 .muted{color:var(--muted);font-size:12px}
-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px}
-th,td{padding:8px 6px;border-bottom:1px solid rgba(0,0,0,0.05);text-align:left}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 13px;
+  table-layout: fixed; /* Tambahkan */
+}
+
+th, td {
+  padding: 8px 6px;
+  text-align: left;
+  border-bottom:1px solid rgba(0,0,0,0.05);
+  overflow: hidden;          /* Tambahkan */
+  text-overflow: ellipsis;   /* Tambahkan */
+  white-space: nowrap;        /* Tambahkan */
+  font-size: 13px;
+}
+/* Atur lebar kolom agar stabil */
+th:nth-child(1), td:nth-child(1) { width: 40px; }   /* No */
+th:nth-child(2), td:nth-child(2) { width: 80px; }   /* Gram */
+th:nth-child(3), td:nth-child(3) { width: 100px; }  /* Tanggal */
+th:nth-child(4), td:nth-child(4) { width: 100px; }  /* Harga/gr */
+th:nth-child(5), td:nth-child(5) { width: 100px; }  /* Nilai beli */
+th:nth-child(6), td:nth-child(6) { width: 100px; }  /* Nilai sekarang */
+th:nth-child(7), td:nth-child(7) { width: 100px; }  /* Laba */
+th:nth-child(8), td:nth-child(8) { width: 80px; }   /* Aksi */
+
+/* Responsive untuk layar kecil */
+@media(max-width:860px){
+  .right { min-width: auto; }
+  table th, table td { font-size:12px; } /* lebih kecil di HP */
+  th:nth-child(2), td:nth-child(2),
+  th:nth-child(3), td:nth-child(3),
+  th:nth-child(4), td:nth-child(4),
+  th:nth-child(5), td:nth-child(5),
+  th:nth-child(6), td:nth-child(6),
+  th:nth-child(7), td:nth-child(7) {
+    width: auto; /* fleksibel di layar kecil */
+  }
+}
 th{background:var(--accent);color:var(--text);font-weight:600;font-size:13px}
 tr:hover td{background:rgba(0,0,0,0.03)}
 tfoot td{font-weight:700;background:rgba(0,0,0,0.05);color:var(--gold)}
